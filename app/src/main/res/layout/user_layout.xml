@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_50sdp"
+    android:gravity="center_vertical"
+    android:layout_marginTop="@dimen/_5sdp"
+    android:background="@drawable/round_corners"
+    android:backgroundTint="#fa5"
+    android:orientation="horizontal">
+    <include
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        layout="@layout/profile_pic_view"/>
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:gravity="center_vertical"
+        android:text="btech user 1"
+        android:textSize="@dimen/_12sdp"
+        android:textStyle="bold"/>
+
+</LinearLayout>

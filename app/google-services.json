@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "489669506916",
+    "project_id": "btech-fb954",
+    "storage_bucket": "btech-fb954.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:489669506916:android:e1f6c0dee790f30249ec71",
+        "android_client_info": {
+          "package_name": "com.sai.btech"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "489669506916-r4h562ba8scsa4n72giqfmg5fo7s9sgs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sai.btech",
+            "certificate_hash": "5edfaf709c431a275da0965f1784229b0a7c2433"
+          }
+        },
+        {
+          "client_id": "489669506916-fom4m9nuj9gfc6pbngeksberivtp6v1u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqKcRIuldX1f0C_8Nu3RgavWJ4jCQHAp8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "489669506916-fom4m9nuj9gfc6pbngeksberivtp6v1u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

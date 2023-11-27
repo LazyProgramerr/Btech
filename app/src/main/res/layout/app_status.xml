@@ -1,0 +1,17 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.Btech.AppWidget.Container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:theme="@style/Theme.Btech.AppWidgetContainer">
+
+    <Switch
+        android:id="@+id/appStatusWidgetSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textStyle="bold"
+        android:textColor="#fa5"
+        android:padding="@dimen/_5sdp"
+        tools:ignore="UseSwitchCompatOrMaterialXml"/>
+</RelativeLayout>
