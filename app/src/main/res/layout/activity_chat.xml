@@ -60,6 +60,7 @@
         android:id="@+id/chat_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="@dimen/_2sdp"
         android:layout_marginHorizontal="@dimen/_5sdp"
         android:layout_above="@+id/msgInput"
         android:layout_below="@id/linearLayout"

@@ -58,15 +58,15 @@ public class HomeActivity extends AppCompatActivity {
         switch (i) {
             case 0 -> {
                 HomeFragment homeFragment1 = new HomeFragment();
-                fragmentManager.beginTransaction().replace(R.id.display, homeFragment1).commit();
+                fragmentManager.beginTransaction().replace(R.id.display, homeFragment1).commitAllowingStateLoss();
             }
             case 1 -> {
                 ChatsFragment chatsFragment = new ChatsFragment();
-                fragmentManager.beginTransaction().replace(R.id.display, chatsFragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.display, chatsFragment).commitAllowingStateLoss();
             }
             case 2 -> {
                 GroupsFragment groupsFragment = new GroupsFragment();
-                fragmentManager.beginTransaction().replace(R.id.display, groupsFragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.display, groupsFragment).commitAllowingStateLoss();
             }
             case 3 ->{
                 ProfileFragment profileFragment = new ProfileFragment();

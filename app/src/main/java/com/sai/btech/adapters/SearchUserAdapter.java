@@ -52,7 +52,6 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Us
         }
 
         UserModelViewHolder.uName.setOnClickListener(v -> {
-//            Toast.makeText(context, ""+userName, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(context, ChatActivity.class);
             intent.putExtra("receiverUid", receiverUid);
             intent.putExtra("receiverName", userName);

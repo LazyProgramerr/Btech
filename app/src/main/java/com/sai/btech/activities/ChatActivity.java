@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.sai.btech.AppFeatures.features;
 import com.sai.btech.R;
 import com.sai.btech.adapters.ChatAdapter;
 import com.sai.btech.databinding.ActivityChatBinding;
@@ -35,7 +37,9 @@ import java.util.Arrays;
 
 public class ChatActivity extends AppCompatActivity {
     private ActivityChatBinding binding;
-    private DatabaseReference drReceiver,drChatroom,dRefer,cRefer;
+    private DatabaseReference drChatroom;
+    private DatabaseReference dRefer;
+    private DatabaseReference cRefer;
     private ShapeableImageView profilePic;
     private FirebaseUser user;
     private String chatRoomId;
@@ -60,11 +64,11 @@ public class ChatActivity extends AppCompatActivity {
         String receiverUid = intent.getStringExtra("receiverUid");
         String receiverName = intent.getStringExtra("receiverName");
         String receiverImg = intent.getStringExtra("receiverImg");
-        Toast.makeText(this, ""+receiverUid, Toast.LENGTH_SHORT).show();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
+        assert receiverUid != null;
+        assert user != null;
         chatRoomId = chatRoom(user.getUid(),receiverUid);
-        drReceiver = FirebaseDatabase.getInstance().getReference("Users");
         drChatroom = FirebaseDatabase.getInstance().getReference("chatRooms");
         dRefer = FirebaseDatabase.getInstance().getReference("chatRooms/"+chatRoomId);
         cRefer = FirebaseDatabase.getInstance().getReference("chatRooms/"+chatRoomId+"/chats");
@@ -92,6 +96,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
         cRefer.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 chatMessageModelArrayList.clear();
@@ -113,14 +118,16 @@ public class ChatActivity extends AppCompatActivity {
     private void sendMessage(String msg) {
         dRefer.child("msgTimeStamp").setValue(Time());
         dRefer.child("lastMsgSenderId").setValue(user.getUid());
+        dRefer.child("msg").setValue(msg);
         long currentTimeMillis = System.currentTimeMillis();
 
         ChatMessageModel chatMessageModel = new ChatMessageModel(msg,user.getUid(),Time());
-        dRefer.child("/chats/"+currentTimeMillis).setValue(chatMessageModel).addOnCompleteListener(task -> {
-            if (task.isSuccessful()){
-                inputMsg.setText("");
-            }
-        });
+        inputMsg.setText("");
+        dRefer.child("/chats/"+currentTimeMillis).setValue(chatMessageModel);//.addOnCompleteListener(task -> {
+//            if (task.isSuccessful()){
+//                features.SnackBar(getCurrentFocus(),"sent");
+//            }
+//        });
     }
 
     private void getChatRoom(String userUid, String receiverUid) {
@@ -135,9 +142,9 @@ public class ChatActivity extends AppCompatActivity {
                     Toast.makeText(ChatActivity.this, "chatroom created", Toast.LENGTH_SHORT).show();
                     chatRoomModel = new ChatRoomModel(
                             chatRoomId,
-                            Arrays.asList(userUid, receiverUid),
-                            Time(),
-                            ""
+                            userUid,receiverUid,
+                            Time(),"",
+                            userUid
                     );
                     drChatroom.child(chatRoomId).setValue(chatRoomModel);
                 }
@@ -183,12 +190,13 @@ public class ChatActivity extends AppCompatActivity {
         // Format the date and time using a specific pattern
         DateTimeFormatter formatter = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            formatter = DateTimeFormatter.ofPattern("dd-MM-yy HH:mm a");
+            formatter = DateTimeFormatter.ofPattern("hh:mm a");
         }
         String formattedDateTime = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             formattedDateTime = currentDateTime.format(formatter);
         }
+
 
         return formattedDateTime;
     }
