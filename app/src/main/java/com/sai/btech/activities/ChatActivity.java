@@ -1,5 +1,7 @@
 package com.sai.btech.activities;
 
+import static com.sai.btech.firebaseUtil.CallApi.call;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -27,8 +31,13 @@ import com.sai.btech.AppFeatures.features;
 import com.sai.btech.R;
 import com.sai.btech.adapters.ChatAdapter;
 import com.sai.btech.databinding.ActivityChatBinding;
+import com.sai.btech.firebaseUtil.CallApi;
 import com.sai.btech.models.ChatMessageModel;
 import com.sai.btech.models.ChatRoomModel;
+import com.sai.btech.models.UserData;
+import com.sai.btech.sharedPreference.SharedPreferenceManager;
+
+import org.json.JSONObject;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -42,7 +51,7 @@ public class ChatActivity extends AppCompatActivity {
     private DatabaseReference cRefer;
     private ShapeableImageView profilePic;
     private FirebaseUser user;
-    private String chatRoomId;
+    private String chatRoomId,Token;
     private EditText inputMsg;
     ChatRoomModel chatRoomModel;
     RecyclerView recyclerView;
@@ -81,6 +90,19 @@ public class ChatActivity extends AppCompatActivity {
             String msg = inputMsg.getText().toString().trim();
             if (!msg.isEmpty()){
                 sendMessage(msg);
+            }
+        });
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users");
+        Query qu = db.orderByChild("uId").equalTo(receiverUid);
+        qu.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Token = ""+snapshot.child("token").getValue();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
         setChat();
@@ -123,11 +145,37 @@ public class ChatActivity extends AppCompatActivity {
 
         ChatMessageModel chatMessageModel = new ChatMessageModel(msg,user.getUid(),Time());
         inputMsg.setText("");
-        dRefer.child("/chats/"+currentTimeMillis).setValue(chatMessageModel);//.addOnCompleteListener(task -> {
-//            if (task.isSuccessful()){
-//                features.SnackBar(getCurrentFocus(),"sent");
-//            }
-//        });
+        dRefer.child("/chats/"+currentTimeMillis).setValue(chatMessageModel).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                sendNotification(msg);
+            }
+        });
+    }
+
+    private void sendNotification(String msg) {
+//        check once again
+        UserData ud = SharedPreferenceManager.getUserData(this);
+        try {
+            JSONObject notificationObject = new JSONObject();
+            notificationObject.put("title", ud.getuName());
+            notificationObject.put("body", msg);
+
+            JSONObject dataObject = new JSONObject();
+            dataObject.put("userId", user.getUid());
+            dataObject.put("userName", ud.getuName());
+            dataObject.put("userImg", ud.getImg());
+
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("notification", notificationObject);
+             jsonObject.put("data", dataObject);
+            jsonObject.put("to", Token);
+
+            // Use AsyncTask to send the notification in the background
+            new SendNotificationTask().execute(jsonObject);
+        } catch (Exception e) {
+            Log.i("json obj", e.toString());
+            Toast.makeText(this, "123" + e, Toast.LENGTH_LONG).show();
+        }
     }
 
     private void getChatRoom(String userUid, String receiverUid) {
@@ -199,5 +247,15 @@ public class ChatActivity extends AppCompatActivity {
 
 
         return formattedDateTime;
+    }
+    private static class SendNotificationTask extends AsyncTask<JSONObject, Void, Void> {
+        @Override
+        protected Void doInBackground(JSONObject... jsonObjects) {
+            // Perform network operation here, e.g., call(jsonObjects[0]);
+            CallApi.call(jsonObjects[0]);
+            return null;
+        }
+
+        // You can override onPostExecute to handle post-execution tasks if needed
     }
 }

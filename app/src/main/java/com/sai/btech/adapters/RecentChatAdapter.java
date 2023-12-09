@@ -25,6 +25,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.sai.btech.R;
 import com.sai.btech.activities.ChatActivity;
+import com.sai.btech.dialogs.ProfileDialog;
 import com.sai.btech.models.ChatRoomModel;
 
 import java.util.List;
@@ -75,6 +76,7 @@ public class RecentChatAdapter extends RecyclerView.Adapter<RecentChatAdapter.Us
         else
             holder.lastChat.setText(msg);
 
+
     }
     private void setDetails(UserChatModelViewHolder holder,String receiverUid){
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users");
@@ -91,12 +93,18 @@ public class RecentChatAdapter extends RecyclerView.Adapter<RecentChatAdapter.Us
                             .load(receiverImage)
                             .placeholder(R.drawable.default_user_icon)
                             .into(holder.profilePic);
+                    holder.profilePic.setOnClickListener(v -> {
+                        ProfileDialog profileDialog = new ProfileDialog(context,receiverImage);
+                        profileDialog.setCancelable(true);
+                        profileDialog.show();
+                    });
 
                     holder.layout.setOnClickListener(v -> {
                         Intent intent = new Intent(context, ChatActivity.class);
                         intent.putExtra("receiverUid", receiverUid);
                         intent.putExtra("receiverName", receiverName);
                         intent.putExtra("receiverImg", receiverImage);
+                        intent.putExtra("fcmToken","jbhug");
                         context.startActivity(intent);
                     });
                 }
