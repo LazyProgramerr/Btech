@@ -30,6 +30,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.sai.btech.R;
 import com.sai.btech.activities.UserStdDetailsActivity;
+import com.sai.btech.firebaseUtil.Token;
 import com.sai.btech.sharedPreference.SharedPreferenceManager;
 import com.sai.btech.activities.WelcomeActivity;
 import com.sai.btech.databinding.ActivityLoginBinding;
@@ -158,6 +159,11 @@ public class LoginActivity extends AppCompatActivity {
 
                 } else {
 //                    generate token and add to database
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    Token.getToken(LoginActivity.this,token -> {
+                        DatabaseReference dr = FirebaseDatabase.getInstance().getReference("Users/"+user.getUid());
+                        dr.child("token").setValue(token);
+                    });
                     SharedPreferenceManager.saveLoginStatus(LoginActivity.this,true);
                     startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
                     Toast.makeText(LoginActivity.this, "success", Toast.LENGTH_SHORT).show();

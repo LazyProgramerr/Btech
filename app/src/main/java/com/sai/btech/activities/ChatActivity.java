@@ -97,7 +97,9 @@ public class ChatActivity extends AppCompatActivity {
         qu.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Token = ""+snapshot.child("token").getValue();
+                for (DataSnapshot db:snapshot.getChildren()) {
+                    Token = ""+db.child("token").getValue();
+                }
             }
 
             @Override
