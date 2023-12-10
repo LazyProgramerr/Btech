@@ -69,7 +69,6 @@ public class ChatActivity extends AppCompatActivity {
         ImageView sendBtn = findViewById(R.id.sendBtn);
         inputMsg = findViewById(R.id.userMessage);
 
-
         Intent intent = getIntent();
         String receiverUid = intent.getStringExtra("receiverUid");
         String receiverName = intent.getStringExtra("receiverName");
@@ -84,9 +83,8 @@ public class ChatActivity extends AppCompatActivity {
         cRefer = FirebaseDatabase.getInstance().getReference("chatRooms/"+chatRoomId+"/chats");
         setReceiverDetails(receiverName,receiverImg);
         getChatRoom(user.getUid(),receiverUid);
-        binding.back.setOnClickListener(v -> {
-            onBackPressed();
-        });
+        binding.back.setOnClickListener(v -> onBackPressed());
+        inputMsg.setOnClickListener(v -> recyclerView.scrollToPosition(adapter.getItemCount() - 1));
         sendBtn.setOnClickListener(v -> {
             String msg = inputMsg.getText().toString().trim();
             if (!msg.isEmpty()){

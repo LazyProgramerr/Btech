@@ -16,6 +16,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
@@ -57,6 +58,12 @@ public class features {
         return formattedTime;
     }
 
+    public static String getDate(String milliseconds) {
+        long ms = Long.parseLong(milliseconds);
+        Date d = new Date(ms);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+        return dateFormat.format(d);
+    }
 }
 /*
   if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
