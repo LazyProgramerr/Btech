@@ -41,7 +41,7 @@
                 android:textColor="@color/black" />
 
             <TextView
-                android:id="@+id/sent_chat_message_time"
+                android:id="@+id/chat_receiver_message_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/chat_receiver_message"
@@ -85,11 +85,10 @@
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/receive_chat_message_time"
+                    android:id="@+id/send_chat_message_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/chat_user_message"
-                    android:text="12:34 PM"
                     android:textColor="#808080"
                     android:textSize="12sp" />
 

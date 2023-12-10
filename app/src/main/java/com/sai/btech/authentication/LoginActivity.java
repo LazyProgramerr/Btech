@@ -164,6 +164,7 @@ public class LoginActivity extends AppCompatActivity {
                         DatabaseReference dr = FirebaseDatabase.getInstance().getReference("Users/"+user.getUid());
                         dr.child("token").setValue(token);
                     });
+                    setDetailsInLocal();
                     SharedPreferenceManager.saveLoginStatus(LoginActivity.this,true);
                     startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
                     Toast.makeText(LoginActivity.this, "success", Toast.LENGTH_SHORT).show();
@@ -192,6 +193,28 @@ public class LoginActivity extends AppCompatActivity {
                                         .show();
                             }
                         });
+    }
+    private void setDetailsInLocal() {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users");
+        Query query = db.orderByChild("uId").equalTo(firebaseUser.getUid());
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds:snapshot.getChildren()) {
+                    SharedPreferenceManager.saveUserData(LoginActivity.this,
+                            ds.child("name").getValue().toString(),
+                            ds.child("email").getValue().toString(),
+                            ds.child("phone").getValue().toString(),
+                            ds.child("image").getValue().toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void goToRegister(View v) {

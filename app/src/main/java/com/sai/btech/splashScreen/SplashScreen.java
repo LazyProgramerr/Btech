@@ -31,44 +31,59 @@ public class SplashScreen extends AppCompatActivity {
         if (ut.getTheme()) {
             changeTheme(ut.getTheme());
         }
-        new Handler().postDelayed(() -> {
+        new Handler().postDelayed(()->{
             try {
                 FirebaseApp.initializeApp(this);
-                // Check if the instance has already been initialized with persistence
                 FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-                startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
+                startActivity(new Intent(this, WelcomeActivity.class));
                 finish();
+            }catch (Exception e){
+                startActivity(new Intent(this, WelcomeActivity.class));
+                finish();
+            }
+
+        },2000);
+       /* new Handler().postDelayed(() -> {
+            try {
+                FirebaseApp.initializeApp(this);
+                FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
+                if (getIntent().getExtras() != null) {
+                    openContent();
+                } else {
+                    startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
+                    finish();
+                }
             } catch (Exception e) {
+                // Handle exceptions appropriately
                 startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
                 finish();
             }
-        }, 2000);
+        }, 2000);*/
     }
-}
-/*
- if (getIntent().getExtras() != null) {
-                // Go to the content
-                String receiverName = getIntent().getExtras().getString("userName");
-                String receiverImage = getIntent().getExtras().getString("userImg");
-                String userId = getIntent().getExtras().getString("userId");
-                Intent i = new Intent(this, HomeActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(i);
 
-                Intent intent = new Intent(SplashScreen.this, ChatActivity.class);
-                intent.putExtra("receiverUid", userId);
-                intent.putExtra("receiverName", receiverName);
-                intent.putExtra("receiverImg", receiverImage);
-                intent.putExtra("fcmToken", "token[0]");
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+   /* private void openContent() {
+        if (getIntent().getExtras() != null) {
+            String receiverName = getIntent().getExtras().getString("userName");
+            String receiverImage = getIntent().getExtras().getString("userImg");
+            String userId = getIntent().getExtras().getString("userId");
 
-                finish();
+            Intent i = new Intent(this, HomeActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(i);
 
+            Intent intent = new Intent(SplashScreen.this, ChatActivity.class);
+            intent.putExtra("receiverUid", userId);
+            intent.putExtra("receiverName", receiverName);
+            intent.putExtra("receiverImg", receiverImage);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
 
- }try {
-
-        }catch(Exception e){
-            Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+            finish();
+        } else {
+            // If no extras, start the WelcomeActivity
+            startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
+            finish();
         }
- */
+    }*/
+}

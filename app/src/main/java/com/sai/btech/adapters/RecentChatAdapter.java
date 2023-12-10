@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.sai.btech.AppFeatures.features;
 import com.sai.btech.R;
 import com.sai.btech.activities.ChatActivity;
 import com.sai.btech.dialogs.ProfileDialog;
@@ -64,7 +65,7 @@ public class RecentChatAdapter extends RecyclerView.Adapter<RecentChatAdapter.Us
         }
         lastMsgSender = usersList.get(position).getLastMsgSenderId();
         lastMessageTime = usersList.get(position).getMsgTimeStamp();
-        holder.time.setText(lastMessageTime);
+        holder.time.setText(features.readableTime(lastMessageTime));
         msg = usersList.get(position).getMsg();
         if (msg.length() > 20) {
             int lengthToReplace = msg.length() - 20;

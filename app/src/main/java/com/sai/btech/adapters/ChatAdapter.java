@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.sai.btech.AppFeatures.features;
 import com.sai.btech.R;
 import com.sai.btech.models.ChatMessageModel;
 
@@ -43,12 +44,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             holder.leftLayout.setVisibility(View.GONE);
             holder.rightLayout.setVisibility(View.VISIBLE);
             holder.rightChat.setText(chatMessageModel.getMessage());
-            holder.rightTime.setText(chatMessageModel.getTimestamp());
+            holder.rightTime.setText(features.readableTime(chatMessageModel.getTimestamp()));
         }else{
             holder.leftLayout.setVisibility(View.VISIBLE);
             holder.rightLayout.setVisibility(View.GONE);
             holder.leftChat.setText(chatMessageModel.getMessage());
-            holder.leftTime.setText(chatMessageModel.getTimestamp());
+            holder.leftTime.setText(features.readableTime(chatMessageModel.getTimestamp()));
         }
     }
 
@@ -63,8 +64,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         public ChatViewHolder(@NonNull View itemView) {
             super(itemView);
             rightChat = itemView.findViewById(R.id.chat_user_message);
-            leftTime = itemView.findViewById(R.id.receive_chat_message_time);
-            rightTime = itemView.findViewById(R.id.sent_chat_message_time);
+            leftTime = itemView.findViewById(R.id.chat_receiver_message_time);
+            rightTime = itemView.findViewById(R.id.send_chat_message_time);
             leftLayout = itemView.findViewById(R.id.leftMsgLayout);
             rightLayout = itemView.findViewById(R.id.rightMsgLayout);
             leftChat = itemView.findViewById(R.id.chat_receiver_message);

@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -90,7 +91,7 @@ public class ChatActivity extends AppCompatActivity {
             String msg = inputMsg.getText().toString().trim();
             if (!msg.isEmpty()){
                 sendMessage(msg);
-            }
+               }
         });
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users");
         Query qu = db.orderByChild("uId").equalTo(receiverUid);
@@ -140,12 +141,13 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendMessage(String msg) {
-        dRefer.child("msgTimeStamp").setValue(Time());
+        String currentTimeMillis = String.valueOf(System.currentTimeMillis());
+        dRefer.child("msgTimeStamp").setValue(currentTimeMillis);
         dRefer.child("lastMsgSenderId").setValue(user.getUid());
         dRefer.child("msg").setValue(msg);
-        long currentTimeMillis = System.currentTimeMillis();
 
-        ChatMessageModel chatMessageModel = new ChatMessageModel(msg,user.getUid(),Time());
+
+        ChatMessageModel chatMessageModel = new ChatMessageModel(msg,user.getUid(),currentTimeMillis);
         inputMsg.setText("");
         dRefer.child("/chats/"+currentTimeMillis).setValue(chatMessageModel).addOnCompleteListener(task -> {
             if (task.isSuccessful()){
@@ -193,7 +195,7 @@ public class ChatActivity extends AppCompatActivity {
                     chatRoomModel = new ChatRoomModel(
                             chatRoomId,
                             userUid,receiverUid,
-                            Time(),"",
+                            String.valueOf(System.currentTimeMillis()),"",
                             userUid
                     );
                     drChatroom.child(chatRoomId).setValue(chatRoomModel);
