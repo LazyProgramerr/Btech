@@ -46,27 +46,27 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         if (chatMessageModel.getSenderId().equals(user.getUid())){
             holder.leftLayout.setVisibility(View.GONE);
             holder.rightLayout.setVisibility(View.VISIBLE);
-            if(!date.equals(features.getDate(chatMessageModel.getTimestamp()))){
-                holder.msgDate.setVisibility(View.VISIBLE);
-                date = features.getDate(chatMessageModel.getTimestamp());
-                holder.msgDate.setText(date);
-
-            }else {
+//            if(!date.equals(features.getDate(chatMessageModel.getTimestamp()))){
+//                holder.msgDate.setVisibility(View.VISIBLE);
+//                date = features.getDate(chatMessageModel.getTimestamp());
+//                holder.msgDate.setText(date);
+//
+//            }else {
                 holder.msgDate.setVisibility(View.GONE);
-            }
+//            }
             holder.rightChat.setText(chatMessageModel.getMessage());
             holder.rightTime.setText(features.readableTime(chatMessageModel.getTimestamp()));
 
         }else{
             holder.leftLayout.setVisibility(View.VISIBLE);
             holder.rightLayout.setVisibility(View.GONE);
-            if(!date.equals(features.getDate(chatMessageModel.getTimestamp()))){
-                holder.msgDate.setVisibility(View.VISIBLE);
-                date = features.getDate(chatMessageModel.getTimestamp());
-                holder.msgDate.setText(date);
-            }else {
+//            if(!date.equals(features.getDate(chatMessageModel.getTimestamp()))){
+//                holder.msgDate.setVisibility(View.VISIBLE);
+//                date = features.getDate(chatMessageModel.getTimestamp());
+//                holder.msgDate.setText(date);
+//            }else {
                 holder.msgDate.setVisibility(View.GONE);
-            }
+//            }
             holder.leftChat.setText(chatMessageModel.getMessage());
             holder.leftTime.setText(features.readableTime(chatMessageModel.getTimestamp()));
         }

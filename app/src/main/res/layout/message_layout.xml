@@ -45,6 +45,9 @@
                     android:text="This is a receiver message"
                     android:layout_below="@id/chat_receiver_image"
                     android:textSize="16sp"
+                    android:textColorLink="@color/white"
+                    android:textIsSelectable="true"
+                    android:autoLink="all"
                     android:textColor="@color/black" />
 
                 <TextView
@@ -88,6 +91,9 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/senderImage"
                     android:maxWidth="@dimen/_250sdp"
+                    android:textIsSelectable="true"
+                    android:autoLink="all"
+                    android:textColorLink="@color/white"
                     android:text="This is a sender message"
                     android:textColor="@color/black"
                     android:textSize="16sp" />

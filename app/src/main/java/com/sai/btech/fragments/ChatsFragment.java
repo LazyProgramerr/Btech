@@ -66,6 +66,7 @@ public class ChatsFragment extends Fragment {
 
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     ChatRoomModel chatRoomModel = dataSnapshot.getValue(ChatRoomModel.class);
+                    assert chatRoomModel != null;
                     if (chatRoomModel.getUser1().equals(user.getUid()) | chatRoomModel.getUser2().equals(user.getUid()))
                         recentList.add(chatRoomModel);
                 }

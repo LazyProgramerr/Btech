@@ -202,11 +202,13 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds:snapshot.getChildren()) {
-                    SharedPreferenceManager.saveUserData(LoginActivity.this,
-                            ds.child("name").getValue().toString(),
-                            ds.child("email").getValue().toString(),
-                            ds.child("phone").getValue().toString(),
-                            ds.child("image").getValue().toString());
+                    for (DataSnapshot db :snapshot.getChildren()) {
+                        SharedPreferenceManager.saveUserData(LoginActivity.this,
+                                ""+ds.child("name").getValue(),
+                                ""+ds.child("email").getValue(),
+                                ""+ds.child("phone").getValue(),
+                                ""+ds.child("image").getValue());
+                    }
                 }
             }
 
