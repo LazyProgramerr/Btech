@@ -3,7 +3,7 @@ package com.sai.btech.models;
 import java.util.List;
 
 public class ChatRoomModel {
-    String ChatroomId;
+    String ChatRoomId;
     String user1;
     String user2;
     String msgTimeStamp;
@@ -13,8 +13,8 @@ public class ChatRoomModel {
     public ChatRoomModel() {
     }
 
-    public ChatRoomModel(String ChatroomId, String user1,String user2, String msgTimeStamp,String msg, String lastMsgSenderId) {
-        this.ChatroomId = ChatroomId;
+    public ChatRoomModel(String chatroomId, String user1,String user2, String msgTimeStamp,String msg, String lastMsgSenderId) {
+        this.ChatRoomId = chatroomId;
         this.user1 = user1;
         this.user2 = user2;
         this.msgTimeStamp = msgTimeStamp;
@@ -47,11 +47,11 @@ public class ChatRoomModel {
     }
 
     public String getChatroomId() {
-        return ChatroomId;
+        return ChatRoomId;
     }
 
-    public void setChatroomId(String ChatroomId) {
-        ChatroomId = ChatroomId;
+    public void setChatroomId(String chatroomId) {
+        ChatRoomId = chatroomId;
     }
 
 

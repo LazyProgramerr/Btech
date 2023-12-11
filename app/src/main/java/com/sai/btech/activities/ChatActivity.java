@@ -52,7 +52,7 @@ public class ChatActivity extends AppCompatActivity {
     private DatabaseReference cRefer;
     private ShapeableImageView profilePic;
     private FirebaseUser user;
-    private String chatRoomId,Token;
+    private String ChatRoomId,Token;
     private EditText inputMsg;
     ChatRoomModel chatRoomModel;
     RecyclerView recyclerView;
@@ -77,10 +77,10 @@ public class ChatActivity extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
         assert receiverUid != null;
         assert user != null;
-        chatRoomId = chatRoom(user.getUid(),receiverUid);
+        ChatRoomId = chatRoom(user.getUid(),receiverUid);
         drChatroom = FirebaseDatabase.getInstance().getReference("chatRooms");
-        dRefer = FirebaseDatabase.getInstance().getReference("chatRooms/"+chatRoomId);
-        cRefer = FirebaseDatabase.getInstance().getReference("chatRooms/"+chatRoomId+"/chats");
+        dRefer = FirebaseDatabase.getInstance().getReference("chatRooms/"+ChatRoomId);
+        cRefer = FirebaseDatabase.getInstance().getReference("chatRooms/"+ChatRoomId+"/chats");
         setReceiverDetails(receiverName,receiverImg);
         getChatRoom(user.getUid(),receiverUid);
         binding.back.setOnClickListener(v -> onBackPressed());
@@ -182,7 +182,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void getChatRoom(String userUid, String receiverUid) {
 
-        Query query = drChatroom.orderByChild("ChatroomId").equalTo(chatRoomId);
+        Query query = drChatroom.orderByChild("chatroomId").equalTo(ChatRoomId);
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -191,12 +191,12 @@ public class ChatActivity extends AppCompatActivity {
                     // Chat room doesn't exist, create a new one
                     Toast.makeText(ChatActivity.this, "chatroom created", Toast.LENGTH_SHORT).show();
                     chatRoomModel = new ChatRoomModel(
-                            chatRoomId,
+                            ChatRoomId,
                             userUid,receiverUid,
                             String.valueOf(System.currentTimeMillis()),"",
                             userUid
                     );
-                    drChatroom.child(chatRoomId).setValue(chatRoomModel);
+                    drChatroom.child(ChatRoomId).setValue(chatRoomModel);
                 }
             }
 
