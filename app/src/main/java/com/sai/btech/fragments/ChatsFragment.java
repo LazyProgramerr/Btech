@@ -45,7 +45,7 @@ public class ChatsFragment extends Fragment {
             startActivity(new Intent(getContext(), SearchActivity.class));
         });
 
-        DatabaseReference usersReference = FirebaseDatabase.getInstance().getReference("chatRooms");
+        DatabaseReference usersReference = FirebaseDatabase.getInstance().getReference("chatRooms/private");
         usersReference.keepSynced(true);
 
         recyclerView = fragementChat.findViewById(R.id.recentChats);
@@ -58,7 +58,7 @@ public class ChatsFragment extends Fragment {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
 
-        usersReference.addValueEventListener(new ValueEventListener() {
+        usersReference.child("private").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // Clear the existing list before adding new data
@@ -66,7 +66,8 @@ public class ChatsFragment extends Fragment {
 
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     ChatRoomModel chatRoomModel = dataSnapshot.getValue(ChatRoomModel.class);
-                    if (chatRoomModel.getUser1().equals(user.getUid()) | chatRoomModel.getUser2().equals(user.getUid()))
+                    assert chatRoomModel != null;
+                    if (chatRoomModel.getChatRoomMembers().contains(user.getUid()))
                         recentList.add(chatRoomModel);
                 }
                 // Notify the adapter that the data has changed

@@ -13,9 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.FirebaseDatabase;
 import com.sai.btech.R;
-import com.sai.btech.activities.HomeActivity;
+
+import com.sai.btech.activities.WelcomeActivity;
 import com.sai.btech.models.UserTheme;
-import com.sai.btech.sharedPreference.SharedPreferenceManager;
+import com.sai.btech.managers.SharedPreferenceManager;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashScreen extends AppCompatActivity {
@@ -23,21 +24,65 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
+
         UserTheme ut = SharedPreferenceManager.getUserTheme(this);
-        if (ut.getTheme()){
+        if (ut.getTheme()) {
             changeTheme(ut.getTheme());
         }
         new Handler().postDelayed(()->{
             try {
                 FirebaseApp.initializeApp(this);
+                // Enable App Check with SafetyNet provider
                 FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-                startActivity(new Intent(this, HomeActivity.class));
+                startActivity(new Intent(this, WelcomeActivity.class));
                 finish();
             }catch (Exception e){
-                startActivity(new Intent(this, HomeActivity.class));
+                startActivity(new Intent(this, WelcomeActivity.class));
                 finish();
             }
 
         },2000);
+       /* new Handler().postDelayed(() -> {
+            try {
+                FirebaseApp.initializeApp(this);
+                FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
+                if (getIntent().getExtras() != null) {
+                    openContent();
+                } else {
+                    startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
+                    finish();
+                }
+            } catch (Exception e) {
+                // Handle exceptions appropriately
+                startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
+                finish();
+            }
+        }, 2000);*/
     }
+
+   /* private void openContent() {
+        if (getIntent().getExtras() != null) {
+            String receiverName = getIntent().getExtras().getString("userName");
+            String receiverImage = getIntent().getExtras().getString("userImg");
+            String userId = getIntent().getExtras().getString("userId");
+
+            Intent i = new Intent(this, HomeActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(i);
+
+            Intent intent = new Intent(SplashScreen.this, ChatActivity.class);
+            intent.putExtra("receiverUid", userId);
+            intent.putExtra("receiverName", receiverName);
+            intent.putExtra("receiverImg", receiverImage);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+            finish();
+        } else {
+            // If no extras, start the WelcomeActivity
+            startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
+            finish();
+        }
+    }*/
 }

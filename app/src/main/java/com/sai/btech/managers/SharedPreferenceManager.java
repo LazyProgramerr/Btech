@@ -1,4 +1,4 @@
-package com.sai.btech.sharedPreference;
+package com.sai.btech.managers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -48,13 +48,14 @@ public class SharedPreferenceManager {
         return new UserBioAuthStatus(authStatus);
     }
     //    saving and getting userData status
-    public static void saveUserData(Context context,String Name,String email,String phone,String image){
+    public static void saveUserData(Context context,String Name,String email,String phone,String image,String userId){
         SharedPreferences sharedPreferences = context.getSharedPreferences(btech.SHARED_PREFS_USER_DATA,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("name",Name);
         editor.putString("email",email);
         editor.putString("phone",phone);
         editor.putString("image",image);
+        editor.putString("userId",userId);
         editor.apply();
     }
     public static UserData getUserData(Context context){
@@ -63,7 +64,8 @@ public class SharedPreferenceManager {
         String email = sharedPreferences.getString("email","");
         String phone = sharedPreferences.getString("phone","");
         String img = sharedPreferences.getString("image","");
-        return new UserData(name,email,phone,img);
+        String uid = sharedPreferences.getString("userId","");
+        return new UserData(name,email,phone,img,uid);
     }
     //    saving and getting App Status
     public static void saveAppStatus(Context context,boolean appStatus){

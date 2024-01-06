@@ -4,63 +4,74 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <LinearLayout
-        android:layout_width="@dimen/_250sdp"
-        android:layout_height="wrap_content"
-        android:id="@+id/leftMsgLayout"
-        android:gravity="start"
-        android:layout_alignParentStart="true">
-        <RelativeLayout
-            android:layout_width="wrap_content"
+
+
+    <RelativeLayout
+        android:id="@+id/msg"
+        android:layout_width="match_parent"
+        android:layout_below="@id/dataTime"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="@dimen/_250sdp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/round_corners"
-            android:backgroundTint="#fa5"
-            android:padding="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="4dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <!-- ImageView for sender's image -->
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/chat_receiver_image"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                app:shapeAppearanceOverlay="@style/round"
-                android:src="@drawable/default_user_icon"
-                android:visibility="gone"/>
-
-            <TextView
-                android:id="@+id/chat_receiver_message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="This is a receiver message"
-                android:layout_below="@id/chat_receiver_image"
-                android:textSize="16sp"
-                android:textColor="@color/black" />
-
-            <TextView
-                android:id="@+id/sent_chat_message_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/chat_receiver_message"
-                android:textColor="#808080"
-                android:textSize="12sp" />
-
-        </RelativeLayout>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="@dimen/_250sdp"
-        android:layout_height="wrap_content"
-        android:id="@+id/rightMsgLayout"
-        android:gravity="end"
-        android:layout_alignParentEnd="true">
+            android:id="@+id/leftMsgLayout"
+            android:gravity="start"
+            android:layout_alignParentStart="true">
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_2sdp"
+                android:orientation="vertical"
+                android:background="@drawable/round_corners"
+                android:backgroundTint="#fa5"
+                android:padding="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <!-- ImageView for sender's image -->
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/chat_receiver_image"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:shapeAppearanceOverlay="@style/round"
+                    android:src="@drawable/default_user_icon"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/chat_receiver_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="This is a receiver message"
+                    android:layout_below="@id/chat_receiver_image"
+                    android:textSize="16sp"
+                    android:textColorLink="@color/white"
+                    android:textIsSelectable="true"
+                    android:autoLink="all"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/chat_receiver_message_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/chat_receiver_message"
+                    android:textColor="#808080"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="@dimen/_250sdp"
+            android:layout_height="wrap_content"
+            android:id="@+id/rightMsgLayout"
+            android:gravity="end"
+            android:layout_alignParentEnd="true">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="end"
+                android:layout_margin="@dimen/_2sdp"
                 android:background="@drawable/round_corners"
                 android:backgroundTint="#fa5"
                 android:padding="8dp">
@@ -80,21 +91,33 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/senderImage"
                     android:maxWidth="@dimen/_250sdp"
+                    android:textIsSelectable="true"
+                    android:autoLink="all"
+                    android:textColorLink="@color/white"
                     android:text="This is a sender message"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/receive_chat_message_time"
+                    android:id="@+id/send_chat_message_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/chat_user_message"
-                    android:text="12:34 PM"
                     android:textColor="#808080"
                     android:textSize="12sp" />
 
             </RelativeLayout>
-    </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dataTime"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:textSize="@dimen/_13sdp"
+        android:background="@drawable/round_corners"
+        android:paddingHorizontal="@dimen/_10sdp" />
 
 
 

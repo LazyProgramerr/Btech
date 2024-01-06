@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Vibrator;
 
 import com.sai.btech.models.VibrateStatus;
-import com.sai.btech.sharedPreference.SharedPreferenceManager;
+import com.sai.btech.managers.SharedPreferenceManager;
 
 public class Vibrate {
     public static void vibratePhone(Context context, long milliSeconds){

@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,10 +24,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.sai.btech.AppFeatures.features;
 import com.sai.btech.R;
 import com.sai.btech.activities.ChatActivity;
+import com.sai.btech.dialogs.ProfileDialog;
 import com.sai.btech.models.ChatRoomModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecentChatAdapter extends RecyclerView.Adapter<RecentChatAdapter.UserChatModelViewHolder> {
@@ -50,20 +54,19 @@ public class RecentChatAdapter extends RecyclerView.Adapter<RecentChatAdapter.Us
 
     @Override
     public void onBindViewHolder(@NonNull RecentChatAdapter.UserChatModelViewHolder holder, int position) {
-        String user1,user2,receiverUid,msg,lastMsgSender,lastMessageTime;;
-        user1 = usersList.get(position).getUser1();
-        user2 = usersList.get(position).getUser2();
+        String receiverUid,msg,lastMsgSender,lastMessageTime;;
+        ArrayList<String> members = new ArrayList<>();
         user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user1.equals(user.getUid())){
-            receiverUid = user2;
+        if (members.get(0).equals(user.getUid())){
+            receiverUid = members.get(1);
             setDetails(holder,receiverUid);
         } else {
-            receiverUid = user1;
+            receiverUid = members.get(0);
             setDetails(holder,receiverUid);
         }
         lastMsgSender = usersList.get(position).getLastMsgSenderId();
         lastMessageTime = usersList.get(position).getMsgTimeStamp();
-        holder.time.setText(lastMessageTime);
+        holder.time.setText(features.readableTime(lastMessageTime));
         msg = usersList.get(position).getMsg();
         if (msg.length() > 20) {
             int lengthToReplace = msg.length() - 20;
@@ -75,6 +78,7 @@ public class RecentChatAdapter extends RecyclerView.Adapter<RecentChatAdapter.Us
         else
             holder.lastChat.setText(msg);
 
+
     }
     private void setDetails(UserChatModelViewHolder holder,String receiverUid){
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("Users");
@@ -83,20 +87,27 @@ public class RecentChatAdapter extends RecyclerView.Adapter<RecentChatAdapter.Us
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    String receiverName = "" + ds.child("name").getValue();
-                    String receiverImage = "" + ds.child("image").getValue();
-
-                    holder.uName.setText(receiverName);
+                    String chatRoomName = "" + ds.child("name").getValue();
+                    String chatRoomImage = "" + ds.child("image").getValue();
+                    String chatRoomType = ""+ds.child("chatRoomType").getValue();
+                    holder.uName.setText(chatRoomName);
                     Glide.with(context)
-                            .load(receiverImage)
+                            .load(chatRoomImage)
                             .placeholder(R.drawable.default_user_icon)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(holder.profilePic);
+                    holder.profilePic.setOnClickListener(v -> {
+                        ProfileDialog profileDialog = new ProfileDialog(context,chatRoomImage);
+                        profileDialog.setCancelable(true);
+                        profileDialog.show();
+                    });
 
                     holder.layout.setOnClickListener(v -> {
                         Intent intent = new Intent(context, ChatActivity.class);
-                        intent.putExtra("receiverUid", receiverUid);
-                        intent.putExtra("receiverName", receiverName);
-                        intent.putExtra("receiverImg", receiverImage);
+                        intent.putExtra("chatRoomId", receiverUid);
+                        intent.putExtra("chatRoomName", chatRoomName);
+                        intent.putExtra("chatRoomImg", chatRoomImage);
+                        intent.putExtra("chatRoomType",chatRoomType);
                         context.startActivity(intent);
                     });
                 }

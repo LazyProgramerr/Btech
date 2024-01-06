@@ -1,203 +1,111 @@
 package com.sai.btech.activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import static com.sai.btech.notification.sendNotificationUsingOkhttp.sendNotification;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.imageview.ShapeableImageView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.sai.btech.AppFeatures.features;
 import com.sai.btech.R;
 import com.sai.btech.adapters.ChatAdapter;
-import com.sai.btech.databinding.ActivityChatBinding;
 import com.sai.btech.models.ChatMessageModel;
-import com.sai.btech.models.ChatRoomModel;
+import com.sai.btech.models.UserData;
+import com.sai.btech.managers.SharedPreferenceManager;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ChatActivity extends AppCompatActivity {
-    private ActivityChatBinding binding;
-    private DatabaseReference drChatroom;
-    private DatabaseReference dRefer;
-    private DatabaseReference cRefer;
-    private ShapeableImageView profilePic;
-    private FirebaseUser user;
-    private String chatRoomId;
+    private String chatRoomId,chatRoomName,chatRoomImg,chatRoomType;
+    private ArrayList<String> chatRoomMembers;
     private EditText inputMsg;
-    ChatRoomModel chatRoomModel;
-    RecyclerView recyclerView;
-    ArrayList<ChatMessageModel> chatMessageModelArrayList;
-    ChatAdapter adapter;
-
-
+    private DatabaseReference ChatRoomReference;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityChatBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        profilePic = findViewById(R.id.profilePicView);
-        ImageView sendBtn = findViewById(R.id.sendBtn);
+        setContentView(R.layout.activity_chat);
+
+//        fetch chatRoom Details
+        Intent intent = getIntent();
+        chatRoomId = intent.getStringExtra("chatRoomId");
+        chatRoomName = intent.getStringExtra("chatRoomName");
+        chatRoomImg = intent.getStringExtra("chatRoomImg");
+        chatRoomType = intent.getStringExtra("chatRoomType");
+        chatRoomMembers = intent.getStringArrayListExtra("members");
+
+//        fetch layout widgets
+        ShapeableImageView chatRoomIconHolder = findViewById(R.id.profilePicView);
+        TextView chatRoomNameHolder = findViewById(R.id.chatRoomNameHolder);
+        RecyclerView recyclerView = findViewById(R.id.chat_recycler_view);
         inputMsg = findViewById(R.id.userMessage);
 
+//        initialize the database
+        ChatRoomReference = FirebaseDatabase.getInstance().getReference("ChatRooms");
 
-        Intent intent = getIntent();
-        String receiverUid = intent.getStringExtra("receiverUid");
-        String receiverName = intent.getStringExtra("receiverName");
-        String receiverImg = intent.getStringExtra("receiverImg");
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        user = firebaseAuth.getCurrentUser();
-        assert receiverUid != null;
-        assert user != null;
-        chatRoomId = chatRoom(user.getUid(),receiverUid);
-        drChatroom = FirebaseDatabase.getInstance().getReference("chatRooms");
-        dRefer = FirebaseDatabase.getInstance().getReference("chatRooms/"+chatRoomId);
-        cRefer = FirebaseDatabase.getInstance().getReference("chatRooms/"+chatRoomId+"/chats");
-        setReceiverDetails(receiverName,receiverImg);
-        getChatRoom(user.getUid(),receiverUid);
-        binding.back.setOnClickListener(v -> {
-            onBackPressed();
-        });
-        sendBtn.setOnClickListener(v -> {
-            String msg = inputMsg.getText().toString().trim();
-            if (!msg.isEmpty()){
-                sendMessage(msg);
-            }
-        });
-        setChat();
+//        set chatRoom
+        chatRoomNameHolder.setText(chatRoomName);
+        Glide.with(this).load(chatRoomImg).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.default_user_icon).into(chatRoomIconHolder);
+        setChat(ChatRoomReference,recyclerView);
     }
-
-    private void setChat() {
-        recyclerView = findViewById(R.id.chat_recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        chatMessageModelArrayList = new ArrayList<>();
-        adapter = new ChatAdapter(this,chatMessageModelArrayList);
-        recyclerView.setAdapter(adapter);
-
-
-        cRefer.addValueEventListener(new ValueEventListener() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                chatMessageModelArrayList.clear();
-                for (DataSnapshot ds:snapshot.getChildren()) {
-                    ChatMessageModel chatMessageModel = ds.getValue(ChatMessageModel.class);
-                    chatMessageModelArrayList.add(chatMessageModel);
+    
+//    displays the chat using recycleView
+    private void setChat(DatabaseReference chatReference,RecyclerView recyclerView) {
+        recyclerView.setItemViewCacheSize(200);
+        recyclerView.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
+        ArrayList<ChatMessageModel> chatMessageModelArrayList = new ArrayList<>();
+        ChatAdapter chatAdapter = new ChatAdapter(ChatActivity.this,chatMessageModelArrayList);
+        Query query;
+        if (chatRoomType.equals("group")) {
+            query = chatReference.child("groups").orderByChild("chatRoomId").equalTo(chatRoomId);
+        }else {
+            query = chatReference.child("private").orderByChild("chatRoomId").equalTo(chatRoomId);
+        }
+            query.addValueEventListener(new ValueEventListener() {
+                @SuppressLint("NotifyDataSetChanged")
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    chatMessageModelArrayList.clear();
+                    for (DataSnapshot data:snapshot.getChildren()) {
+                       ChatMessageModel chatMessageModel = data.getValue(ChatMessageModel.class);
+                       chatMessageModelArrayList.add(chatMessageModel);
+                    }
+                    chatAdapter.notifyDataSetChanged();
+                    recyclerView.scrollToPosition(chatAdapter.getItemCount() - 1);
                 }
-                adapter.notifyDataSetChanged();
-                recyclerView.scrollToPosition(adapter.getItemCount() - 1);
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {}
+            });
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
+//    updates the data in chatRoom and calls function to send notification for all in the chatRoom
+    public void sendMsg(){
+        String msg = inputMsg.getText().toString().trim();
+        UserData user = SharedPreferenceManager.getUserData(this);
+        if (!msg.isEmpty()){
+            String currentTimeMillis = String.valueOf(System.currentTimeMillis());
+            DatabaseReference chatReference = ChatRoomReference.child(chatRoomType).child(chatRoomId);
+            chatReference.child("msgTimeStamp").setValue(currentTimeMillis);
+            chatReference.child("lastMsgSenderId").setValue(user.getUid());
+            chatReference.child("msg").setValue(msg);
 
-    private void sendMessage(String msg) {
-        dRefer.child("msgTimeStamp").setValue(Time());
-        dRefer.child("lastMsgSenderId").setValue(user.getUid());
-        dRefer.child("msg").setValue(msg);
-        long currentTimeMillis = System.currentTimeMillis();
-
-        ChatMessageModel chatMessageModel = new ChatMessageModel(msg,user.getUid(),Time());
-        inputMsg.setText("");
-        dRefer.child("/chats/"+currentTimeMillis).setValue(chatMessageModel);//.addOnCompleteListener(task -> {
-//            if (task.isSuccessful()){
-//                features.SnackBar(getCurrentFocus(),"sent");
-//            }
-//        });
-    }
-
-    private void getChatRoom(String userUid, String receiverUid) {
-
-        Query query = drChatroom.orderByChild("ChatroomId").equalTo(chatRoomId);
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.exists()) {
-                    // Chat room doesn't exist, create a new one
-                    Toast.makeText(ChatActivity.this, "chatroom created", Toast.LENGTH_SHORT).show();
-                    chatRoomModel = new ChatRoomModel(
-                            chatRoomId,
-                            userUid,receiverUid,
-                            Time(),"",
-                            userUid
-                    );
-                    drChatroom.child(chatRoomId).setValue(chatRoomModel);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle the error
-            }
-        });
-    }
-
-    private String chatRoom(String userUid,String receiverUid){
-        if (userUid.hashCode()<receiverUid.hashCode()){
-            return ""+userUid+"_"+receiverUid;
+            ChatMessageModel chatMessageModel = new ChatMessageModel(msg, user.getUid(), currentTimeMillis);
+            chatReference.child("chats").child(currentTimeMillis).setValue(chatMessageModel).addOnCompleteListener(task -> sendNotification(this,chatRoomId,msg,chatRoomImg,chatRoomName,chatRoomType,chatRoomMembers));
         }
-        else {
-            return "" + receiverUid + "_" + userUid;
-        }
-    }
-
-    private void setReceiverDetails(String receiverName,String receiverImg){
-        binding.receiverName.setText(receiverName);
-        try {
-            Glide.with(ChatActivity.this)
-                    .load(receiverImg)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .placeholder(R.drawable.default_user_icon)
-                    .into(profilePic);
-        }catch (Exception e){
-            Glide.with(ChatActivity.this)
-                    .load(R.drawable.default_user_icon)
-                    .into(profilePic);
-        }
-    }
-    public static String Time() {
-        // Get the current date and time
-        LocalDateTime currentDateTime = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            currentDateTime = LocalDateTime.now();
-        }
-
-        // Format the date and time using a specific pattern
-        DateTimeFormatter formatter = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            formatter = DateTimeFormatter.ofPattern("hh:mm a");
-        }
-        String formattedDateTime = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            formattedDateTime = currentDateTime.format(formatter);
-        }
-
-
-        return formattedDateTime;
     }
 }

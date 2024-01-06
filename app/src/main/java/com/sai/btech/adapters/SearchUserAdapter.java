@@ -18,6 +18,9 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.sai.btech.R;
 import com.sai.btech.activities.ChatActivity;
 import com.sai.btech.dialogs.ProfileDialog;
+import com.sai.btech.managers.ChatRoomManager;
+import com.sai.btech.managers.SharedPreferenceManager;
+import com.sai.btech.models.UserData;
 import com.sai.btech.models.UserListModel;
 
 import java.util.List;
@@ -43,6 +46,7 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Us
         String receiverUid = usersList.get(position).getuId();
         String userImage = usersList.get(position).getImage();
         String userName = usersList.get(position).getName();
+        UserData ud = SharedPreferenceManager.getUserData(context);
 
         UserModelViewHolder.uName.setText(userName);
         try {
@@ -52,10 +56,12 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Us
         }
 
         UserModelViewHolder.uName.setOnClickListener(v -> {
+            ChatRoomManager.chatRoomStatus(receiverUid,ud.getUid());
             Intent intent = new Intent(context, ChatActivity.class);
-            intent.putExtra("receiverUid", receiverUid);
-            intent.putExtra("receiverName", userName);
-            intent.putExtra("receiverImg", userImage);
+            intent.putExtra("chatRoomId", receiverUid);
+            intent.putExtra("chatRoomName", userName);
+            intent.putExtra("chatRoomImg", userImage);
+            intent.putExtra("chatRoomType","private");
             context.startActivity(intent);
         });
         UserModelViewHolder.profilePic.setOnClickListener(v->{
