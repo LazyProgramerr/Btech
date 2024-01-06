@@ -70,8 +70,12 @@ public class ChatActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
         ArrayList<ChatMessageModel> chatMessageModelArrayList = new ArrayList<>();
         ChatAdapter chatAdapter = new ChatAdapter(ChatActivity.this,chatMessageModelArrayList);
-        if (chatRoomType.equals("group")){
-            Query query = chatReference.child("groups").orderByChild("chatRoomId").equalTo(chatRoomId);
+        Query query;
+        if (chatRoomType.equals("group")) {
+            query = chatReference.child("groups").orderByChild("chatRoomId").equalTo(chatRoomId);
+        }else {
+            query = chatReference.child("private").orderByChild("chatRoomId").equalTo(chatRoomId);
+        }
             query.addValueEventListener(new ValueEventListener() {
                 @SuppressLint("NotifyDataSetChanged")
                 @Override
@@ -87,7 +91,7 @@ public class ChatActivity extends AppCompatActivity {
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {}
             });
-        }
+
     }
 //    updates the data in chatRoom and calls function to send notification for all in the chatRoom
     public void sendMsg(){
