@@ -1,8 +1,11 @@
-package com.sai.btech.firebaseUtil;
+package com.sai.btech.notification;
+
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+
+import com.sai.btech.constants.btech;
 
 import org.json.JSONObject;
 
@@ -17,20 +20,15 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class CallApi {
-    private static final String FCM_SEND_URL = "https://fcm.googleapis.com/fcm/send";
-    private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final String CONTENT_TYPE_HEADER = "Content-Type";
-    private static final String FCM_SERVER_KEY = "AAAAcgKTt2Q:APA91bG7CP_-jucmNT-VULLRcmSUSEPyrK6CZoEEbtpSB08UUzpkTBVNNYW-hjDWobB7m1dJ_CSpMrmrR4AkB_4MRQCIivxO4mgslNgT80TxGtDszi3YeSDedlBdm0xrrgM-EDok8oKd";
-
-    public static void call(JSONObject jsonObject) {
+    public static void send(JSONObject jsonObject) {
         OkHttpClient client = new OkHttpClient();
         MediaType mediaType = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(mediaType, jsonObject.toString());
         Request request = new Request.Builder()
-                .url(FCM_SEND_URL)
+                .url(btech.FCM_SEND_URL)
                 .post(body)
-                .addHeader(AUTHORIZATION_HEADER, "key=" + FCM_SERVER_KEY)
-                .addHeader(CONTENT_TYPE_HEADER, "application/json")
+                .addHeader(btech.AUTHORIZATION_HEADER, "key=" + btech.FCM_SERVER_KEY)
+                .addHeader(btech.CONTENT_TYPE_HEADER, "application/json")
                 .build();
 
         client.newCall(request).enqueue(new Callback() {

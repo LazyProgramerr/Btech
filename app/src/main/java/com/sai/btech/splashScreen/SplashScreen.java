@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,11 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.FirebaseDatabase;
 import com.sai.btech.R;
-import com.sai.btech.activities.ChatActivity;
-import com.sai.btech.activities.HomeActivity;
+
 import com.sai.btech.activities.WelcomeActivity;
 import com.sai.btech.models.UserTheme;
-import com.sai.btech.sharedPreference.SharedPreferenceManager;
+import com.sai.btech.managers.SharedPreferenceManager;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashScreen extends AppCompatActivity {
@@ -34,6 +32,7 @@ public class SplashScreen extends AppCompatActivity {
         new Handler().postDelayed(()->{
             try {
                 FirebaseApp.initializeApp(this);
+                // Enable App Check with SafetyNet provider
                 FirebaseDatabase.getInstance().setPersistenceEnabled(true);
                 startActivity(new Intent(this, WelcomeActivity.class));
                 finish();

@@ -15,12 +15,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.sai.btech.AppFeatures.AppUpdate;
 import com.sai.btech.R;
 //import com.sai.btech.Dialogs.AlertDialog;
+import com.sai.btech.activities.WelcomeActivity;
 import com.sai.btech.models.AppStatus;
-import com.sai.btech.sharedPreference.SharedPreferenceManager;
+import com.sai.btech.managers.SharedPreferenceManager;
 import com.sai.btech.activities.SettingsActivity;
-import com.sai.btech.databinding.FragmentHomeBinding;
 
 import java.util.List;
 import java.util.Objects;
@@ -68,6 +69,10 @@ public class HomeFragment extends Fragment {
         // Remove references to binding and replace with direct references to views
         View moreButton = view.findViewById(R.id.more);
         moreButton.setOnClickListener(this::show);
+//        View goTo = view.findViewById(R.id.goTo);
+//        goTo.setOnClickListener(v -> {
+//            startActivity(new Intent(getContext(), AppUpdate.class));
+//        });
     }
 
     private void show(View view) {
@@ -81,7 +86,7 @@ public class HomeFragment extends Fragment {
                 FirebaseAuth.getInstance().signOut();
 //                AlertDialog alertDialog = new AlertDialog(requireActivity(),"qwerty");
 //                alertDialog.show();
-                // startActivity(new Intent(requireContext(), WelcomeActivity.class));
+                 startActivity(new Intent(requireContext(), WelcomeActivity.class));
                 return true;
             } else if (itemId == R.id.settings) {
                 startActivity(new Intent(requireContext(), SettingsActivity.class));

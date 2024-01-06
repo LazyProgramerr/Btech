@@ -10,4 +10,11 @@ public class btech {
     public static final int VIBRATE_LONG = 1000;
     public static final int VIBRATE_SHORT = 500;
     public static final int VIBRATE_VERY_SHORT = 200;
+    public static final String REPLAY = "REPLAY";
+
+    public static final String FCM_SEND_URL = "https://fcm.googleapis.com/fcm/send";
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String CONTENT_TYPE_HEADER = "Content-Type";
+    public static final String FCM_SERVER_KEY = "AAAAcgKTt2Q:APA91bG7CP_-jucmNT-VULLRcmSUSEPyrK6CZoEEbtpSB08UUzpkTBVNNYW-hjDWobB7m1dJ_CSpMrmrR4AkB_4MRQCIivxO4mgslNgT80TxGtDszi3YeSDedlBdm0xrrgM-EDok8oKd";
+
 }

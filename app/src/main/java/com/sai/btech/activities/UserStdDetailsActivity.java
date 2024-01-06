@@ -17,8 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.sai.btech.R;
 import com.sai.btech.firebaseUtil.Token;
-import com.sai.btech.sharedPreference.SharedPreferenceManager;
-import com.sai.btech.activities.WelcomeActivity;
+import com.sai.btech.managers.SharedPreferenceManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -152,7 +151,7 @@ public class UserStdDetailsActivity extends AppCompatActivity {
                 DatabaseReference databaseRefer = database.getReference("Users");
                 databaseRefer.child(user.getUid()).setValue(data);
 
-                SharedPreferenceManager.saveUserData(this, user.getDisplayName(),user.getEmail(), user.getPhoneNumber(), String.valueOf(user.getPhotoUrl()));
+                SharedPreferenceManager.saveUserData(this, user.getDisplayName(),user.getEmail(), user.getPhoneNumber(), String.valueOf(user.getPhotoUrl()),user.getUid());
                 SharedPreferenceManager.saveLoginStatus(this,true);
             }catch (Exception e){
                 SharedPreferenceManager.saveLoginStatus(this,false);

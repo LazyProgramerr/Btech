@@ -41,7 +41,7 @@ import com.sai.btech.R;
 import com.sai.btech.dialogs.ProfileDialog;
 import com.sai.btech.models.UserData;
 import com.sai.btech.databinding.FragmentProfileBinding;
-import com.sai.btech.sharedPreference.SharedPreferenceManager;
+import com.sai.btech.managers.SharedPreferenceManager;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.ByteArrayInputStream;
@@ -105,7 +105,8 @@ public class ProfileFragment extends Fragment {
                     String phoneNumber = "" + ds.child("phoneN").getValue();
                     String email = "" + ds.child("email").getValue();
                     String img = "" + ds.child("image").getValue();
-                    SharedPreferenceManager.saveUserData(context, name, email, phoneNumber, img);
+                    String uid = ""+ds.child("uId").getValue();
+                    SharedPreferenceManager.saveUserData(context, name, email, phoneNumber, img,uid);
                     setDetails();
                 }
             }

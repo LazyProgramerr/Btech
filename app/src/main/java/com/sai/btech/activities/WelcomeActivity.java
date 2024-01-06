@@ -16,7 +16,7 @@ import android.view.View;
 import com.sai.btech.R;
 import com.sai.btech.authentication.LoginActivity;
 import com.sai.btech.models.UserLogin;
-import com.sai.btech.sharedPreference.SharedPreferenceManager;
+import com.sai.btech.managers.SharedPreferenceManager;
 
 public class WelcomeActivity extends AppCompatActivity {
 

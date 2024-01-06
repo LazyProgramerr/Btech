@@ -31,7 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.sai.btech.R;
 import com.sai.btech.activities.UserStdDetailsActivity;
 import com.sai.btech.firebaseUtil.Token;
-import com.sai.btech.sharedPreference.SharedPreferenceManager;
+import com.sai.btech.managers.SharedPreferenceManager;
 import com.sai.btech.activities.WelcomeActivity;
 import com.sai.btech.databinding.ActivityLoginBinding;
 
@@ -207,7 +207,8 @@ public class LoginActivity extends AppCompatActivity {
                                 ""+ds.child("name").getValue(),
                                 ""+ds.child("email").getValue(),
                                 ""+ds.child("phone").getValue(),
-                                ""+ds.child("image").getValue());
+                                ""+ds.child("image").getValue(),
+                                ""+ds.child("uId").getValue());
                     }
                 }
             }
