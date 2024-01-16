@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragements.ChatsFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/chats" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:id="@+id/newChat"
+        android:src="@drawable/add_icon"
+        android:backgroundTint="@color/orange"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_5sdp"
+        android:contentDescription="@string/app_name" />
+
+</FrameLayout>

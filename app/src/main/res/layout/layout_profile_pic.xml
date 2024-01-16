@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.imageview.ShapeableImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/miniUserImageView"
+    android:layout_width="@dimen/_50sdp"
+    android:layout_height="@dimen/_50sdp"
+    android:background="#00000000"
+    android:src="@drawable/default_user_icon"
+    app:shapeAppearanceOverlay="@style/round"
+    app:strokeWidth="@dimen/_1sdp"
+    tools:src="@tools:sample/avatars"/>

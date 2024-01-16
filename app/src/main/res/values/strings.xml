@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Btech</string>
+    <string name="Default_web_client_id">489669506916-r4h562ba8scsa4n72giqfmg5fo7s9sgs.apps.googleusercontent.com</string>
+    <string name="password">Password</string>
+    <string name="profile">Profile</string>
+    <string name="groups">Groups</string>
+    <string name="chats">Chats</string>
+</resources>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/t_img"
+    tools:context=".activities.ChatActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_marginTop="4dp"
+        android:layout_marginHorizontal="@dimen/_5sdp"
+        android:background="@drawable/round_corners"
+        android:backgroundTint="#fa5"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/_10sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.461"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/back_icon" />
+
+        <include
+            android:id="@+id/chatRoomImage"
+            layout="@layout/layout_profile_pic"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginHorizontal="@dimen/_5sdp" />
+
+        <TextView
+            android:id="@+id/chatRoomName"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingStart="20sp"
+            android:paddingEnd="1dp"
+            android:text="target user name"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/three_dots"
+            android:contentDescription="@string/app_name" />
+
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chat_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/_2sdp"
+        android:layout_marginHorizontal="@dimen/_5sdp"
+        android:layout_above="@+id/msgInput"
+        android:layout_below="@id/linearLayout"
+        android:paddingBottom="@dimen/_2sdp"
+        app:layout_constraintBottom_toTopOf="@+id/msgInput"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <include
+        android:id="@+id/msgInput"
+        layout="@layout/layout_type_message"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_marginHorizontal="@dimen/_5sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginBottom="@dimen/_3sdp" />
+
+</RelativeLayout>

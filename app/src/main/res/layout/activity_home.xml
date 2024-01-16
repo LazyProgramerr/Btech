@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="@dimen/_10sdp"
+    android:paddingVertical="@dimen/_5sdp"
+    tools:context=".activities.HomeActivity">
+    <RelativeLayout
+        android:id="@+id/topPanel"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        android:background="@drawable/round_corners"
+        android:backgroundTint="@color/orange"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="0dp"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true">
+        <TextView
+            android:id="@+id/topPanelText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/app_name"
+            android:textSize="@dimen/_15sdp"
+            android:gravity="center_vertical"
+            android:textStyle="bold"/>
+
+        <ImageView
+            android:id="@+id/topPanelOptions"
+            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/three_dots"
+            android:contentDescription="@string/app_name" />
+    </RelativeLayout>
+    <FrameLayout
+        android:id="@+id/fragmentsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topPanel"
+        android:layout_above="@id/bottomNavigationBar"/>
+
+    <me.ibrahimsn.lib.SmoothBottomBar
+        android:id="@+id/bottomNavigationBar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp"
+        app:backgroundColor="#fa5"
+        app:cornerRadius="@dimen/_10sdp"
+        app:corners="all"
+        app:iconMargin="@dimen/_5sdp"
+        app:iconSize="@dimen/_15sdp"
+        app:iconTint="@color/black"
+        app:iconTintActive="#af5"
+        app:indicatorColor="#80454545"
+        app:menu="@menu/bottom_nav_menu"
+        app:sideMargins="@dimen/_10sdp"
+        android:layout_alignParentBottom="true"/>
+
+
+</RelativeLayout>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/_40sdp"
+    android:background="@drawable/round_corners"
+    android:backgroundTint="@color/orange"
+    android:orientation="horizontal"
+    android:maxHeight="@dimen/_50sdp">
+
+    <EditText
+        android:id="@+id/userMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/_40sdp"
+        android:maxHeight="@dimen/_100sdp"
+        android:layout_toStartOf="@+id/sendBtn"
+        android:layout_marginStart="@dimen/_10sdp"
+        android:paddingHorizontal="@dimen/_5sdp"
+        android:hint="enter your message"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
+        android:inputType="textMultiLine"
+        android:nestedScrollingEnabled="true"
+        android:singleLine="false"
+        android:importantForAutofill="no" />
+    <ImageButton
+        android:id="@+id/sendBtn"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:onClick="sendMsg"
+        android:background="#00000000"
+        android:src="@drawable/send_icon"
+        android:contentDescription="@string/app_name" />
+
+
+
+</RelativeLayout>

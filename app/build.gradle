@@ -1,0 +1,103 @@
+plugins {
+    id 'com.android.application'
+    id 'com.google.gms.google-services'
+}
+
+android {
+    namespace 'com.sai.btech'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.sai.btech"
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    signingConfigs {
+        release {
+            storeFile file("keys.jks")
+            storePassword "qwerty123"
+            keyAlias "key0"
+            keyPassword "qwerty123"
+        }
+        debug {
+            storeFile file("keys.jks")
+            storePassword "qwerty123"
+            keyAlias "key0"
+            keyPassword "qwerty123"
+        }
+    }
+    buildTypes {
+        release {
+//            minifyEnabled true
+//            shrinkResources true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+//            minifyEnabled true
+//            shrinkResources true
+            signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildFeatures{
+        viewBinding true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+
+    // App UI Components
+    implementation 'androidx.appcompat:appcompat:1.6.1'  // AndroidX AppCompat for modern UI support
+    implementation 'com.google.android.material:material:1.11.0'  // Material Design components
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'  // ConstraintLayout for flexible layouts
+
+// Firebase Services
+    implementation 'com.google.firebase:firebase-auth:22.3.0'  // Firebase Authentication
+    implementation 'com.google.firebase:firebase-database:20.3.0'  // Firebase Realtime Database
+    implementation 'com.google.firebase:firebase-storage:20.3.0'  // Firebase Storage
+    implementation 'com.google.firebase:firebase-messaging:23.4.0'  // Firebase Cloud Messaging
+    implementation 'com.google.firebase:firebase-firestore:24.10.0'  // Firebase Firestore
+    implementation platform('com.google.firebase:firebase-bom:32.3.1')  // Firebase Bill of Materials for version management
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+
+// Navigation Components
+    implementation 'androidx.navigation:navigation-fragment:2.7.6'  // Navigation fragment
+    implementation 'androidx.navigation:navigation-ui:2.7.6'  // Navigation UI components
+
+// Lifecycle Components
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.7.0'  // LiveData for observing data changes
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0'  // ViewModel for managing UI-related data
+
+// Testing Dependencies
+    testImplementation 'junit:junit:4.13.2'  // JUnit for unit testing
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'  // JUnit extension for Android testing
+
+// Biometric Authentication
+    implementation 'androidx.biometric:biometric:1.1.0'  // AndroidX Biometric Library for biometric authentication
+
+// UI Design Libraries
+    implementation 'com.intuit.sdp:sdp-android:1.1.0'  // Scalable DP library for UI responsiveness
+    implementation 'com.airbnb.android:lottie:6.1.0'  // Lottie for rendering After Effects animations
+    implementation 'com.github.yalantis:ucrop:2.2.8'  // Image cropping library
+    implementation 'com.github.bumptech.glide:glide:4.16.0'  // Glide for image loading
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'  // Glide annotation processor
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'  // ImageView for pinch-to-zoom
+    implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7.9'  // SmoothBottomBar for a customizable bottom navigation view
+
+// Network Requests
+    implementation "com.squareup.okhttp3:okhttp:4.11.0"  // OkHttp for HTTP requests
+
+    implementation("com.android.volley:volley:1.2.1")
+
+
+
+}

@@ -1,0 +1,93 @@
+{
+  "project_info": {
+    "project_number": "489669506916",
+    "firebase_url": "https://btech-fb954-default-rtdb.firebaseio.com",
+    "project_id": "btech-fb954",
+    "storage_bucket": "btech-fb954.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:489669506916:android:e1f6c0dee790f30249ec71",
+        "android_client_info": {
+          "package_name": "com.sai.btech"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "489669506916-ahdrrsi6jqsllup8s1f7d7dj5h6187am.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sai.btech",
+            "certificate_hash": "2fe16a56d9b36484157be17ef1c8b0a75a1da84c"
+          }
+        },
+        {
+          "client_id": "489669506916-j6f4l41lubffgfrlcj91cqidp40aqkep.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sai.btech",
+            "certificate_hash": "a1d5c88f0712778fec6d5c9ef0b3425aaf7eaa56"
+          }
+        },
+        {
+          "client_id": "489669506916-fom4m9nuj9gfc6pbngeksberivtp6v1u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqKcRIuldX1f0C_8Nu3RgavWJ4jCQHAp8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "489669506916-fom4m9nuj9gfc6pbngeksberivtp6v1u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:489669506916:android:a9e0ad569531c24b49ec71",
+        "android_client_info": {
+          "package_name": "com.sai.bteched"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "489669506916-de4en3me36lpms1i0fasppkivp6634cj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sai.bteched",
+            "certificate_hash": "5edfaf709c431a275da0965f1784229b0a7c2433"
+          }
+        },
+        {
+          "client_id": "489669506916-fom4m9nuj9gfc6pbngeksberivtp6v1u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqKcRIuldX1f0C_8Nu3RgavWJ4jCQHAp8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "489669506916-fom4m9nuj9gfc6pbngeksberivtp6v1u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
