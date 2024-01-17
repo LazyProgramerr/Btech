@@ -17,7 +17,7 @@ import com.sai.btech.models.UserData;
 import java.util.ArrayList;
 
 public class ChatRoomManager {
-    public static void CheckChatRoom(Context context, String chatRoomId, String chatRoomType, ArrayList<String> chatRoomMembers){
+    public static void CheckChatRoom(Context context,String chatRoomName, String chatRoomId, String chatRoomType, ArrayList<String> chatRoomMembers,String chatRoomImage){
         UserData ud = SharedPreferenceManager.getUserData(context);
         DatabaseReference chatRoomReferences = FirebaseDatabase.getInstance().getReference("chatRooms");
         DatabaseReference specificChatRoomReference = chatRoomReferences.child(chatRoomType).child(chatRoomId);
@@ -27,7 +27,7 @@ public class ChatRoomManager {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (!snapshot.exists()){
                     // Chat room does not exist, create a new one
-                    ChatRoomModel chatRoomModel = new ChatRoomModel(chatRoomId, chatRoomMembers, String.valueOf(System.currentTimeMillis()), "", ud.getUid(), chatRoomType);
+                    ChatRoomModel chatRoomModel = new ChatRoomModel(chatRoomId, String.valueOf(System.currentTimeMillis()),"",  ud.getuId(),chatRoomType,chatRoomName,chatRoomImage,chatRoomMembers);
                     specificChatRoomReference.setValue(chatRoomModel);
 //                    Toast.makeText(context, "chatRoom Created", Toast.LENGTH_SHORT).show();
                 }/* else {

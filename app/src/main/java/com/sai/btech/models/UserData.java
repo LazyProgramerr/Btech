@@ -3,9 +3,12 @@ package com.sai.btech.models;
 public class UserData {
     public String Name,Phone,eMail,userImg,uId;
 
-    public UserData(String Name, String eMail, String Phone,String userImg,String uId) {
-        this.Name = Name;
-        this.Phone = Phone;
+    public UserData() {
+    }
+
+    public UserData(String name, String phone, String eMail, String userImg, String uId) {
+        Name = name;
+        Phone = phone;
         this.eMail = eMail;
         this.userImg = userImg;
         this.uId = uId;
@@ -43,11 +46,11 @@ public class UserData {
         this.userImg = userImg;
     }
 
-    public String getUid() {
+    public String getuId() {
         return uId;
     }
 
-    public void setUid(String uid) {
-        this.uId = uid;
+    public void setuId(String uId) {
+        this.uId = uId;
     }
 }

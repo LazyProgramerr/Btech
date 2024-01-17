@@ -61,7 +61,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatModelViewH
         String sender = chatMessageModelList.get(position).getSenderId();
         String img = chatMessageModelList.get(position).getSenderImg();
         String id = chatMessageModelList.get(position).getTimestamp();
-        if (ud.getUid().equals(sender)){
+        if (ud.getuId().equals(sender)){
             holder.leftLayout.setVisibility(View.GONE);
             holder.rightLayout.setVisibility(View.VISIBLE);
             Glide.with(context).load(img).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.profileR);
@@ -75,7 +75,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatModelViewH
         holder.chatBubbleHolder.setOnLongClickListener(v -> {
             isSelectable = true;
             selectedChatId.add(id);
-            holder.chatBubbleHolder.setBackgroundColor(Color.argb(40,170,225,80));
+            holder.chatBubbleHolder.setBackgroundColor(R.color.green);
             return true;
         });
         holder.chatBubbleHolder.setOnClickListener(v -> {
@@ -84,7 +84,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatModelViewH
                     holder.chatBubbleHolder.setBackgroundColor(Color.TRANSPARENT);
                     selectedChatId.remove(id);
                 }else {
-                    holder.chatBubbleHolder.setBackgroundColor(Color.argb(40,170,255,85));
+                    holder.chatBubbleHolder.setBackgroundColor(R.color.green);
                     selectedChatId.add(id);
                 }
                 if (selectedChatId.isEmpty()){

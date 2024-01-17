@@ -58,13 +58,13 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Us
         }
         ArrayList<String> chatRoomMembers = new ArrayList<>();
         chatRoomMembers.add(receiverUid);
-        chatRoomMembers.add(ud.getUid());
+        chatRoomMembers.add(ud.getuId());
 
         UserModelViewHolder.userName.setOnClickListener(v -> {
             Intent intent = new Intent(context, ChatActivity.class);
             intent.putExtra("chatRoomImage",receiverImage);
             intent.putExtra("chatRoomName",receiverName);
-            intent.putExtra("chatRoomId",ChatRoomId(ud.getUid(),receiverUid));
+            intent.putExtra("chatRoomId",ChatRoomId(ud.getuId(),receiverUid));
             intent.putExtra("chatRoomType",PRIVATE);
             intent.putStringArrayListExtra("chatRoomMembers",chatRoomMembers);
             context.startActivity(intent);

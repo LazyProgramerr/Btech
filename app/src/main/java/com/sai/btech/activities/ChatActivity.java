@@ -36,7 +36,7 @@ public class ChatActivity extends AppCompatActivity {
     private ActivityChatBinding layoutWidgets;
     DatabaseReference chatReference;
     String chatRoomImage,chatRoomType,chatRoomId,chatRoomName;
-    ArrayList<String> chatRoomMembers;
+    ArrayList<String> chatRoomMembers = new ArrayList<>();
     ChatAdapter chatAdapter;
     List<ChatMessageModel> chatMessageModelList;
 
@@ -53,7 +53,7 @@ public class ChatActivity extends AppCompatActivity {
         chatRoomType = i.getStringExtra("chatRoomType");
         chatRoomMembers = i.getStringArrayListExtra("chatRoomMembers");
 
-        CheckChatRoom(this,chatRoomId,chatRoomType,chatRoomMembers);
+        CheckChatRoom(this,chatRoomName,chatRoomId,chatRoomType,chatRoomMembers,chatRoomImage);
 
 //        set chatroom
         layoutWidgets.chatRoomName.setText(chatRoomName);
@@ -100,9 +100,9 @@ public class ChatActivity extends AppCompatActivity {
 
     private void send(String msg,String time) {
         UserData ud = SharedPreferenceManager.getUserData(this);
-        ChatMessageModel chatMessageModel = new ChatMessageModel(msg,ud.getUid(),time,ud.getUserImg());
+        ChatMessageModel chatMessageModel = new ChatMessageModel(msg,ud.getuId(),time,ud.getUserImg());
         chatReference.child(chatRoomId).child("chats").child(time).setValue(chatMessageModel);
-        chatReference.child(chatRoomId).child("lastMsgSenderId").setValue(ud.getUid());
+        chatReference.child(chatRoomId).child("lastMsgSenderId").setValue(ud.getuId());
         chatReference.child(chatRoomId).child("msg").setValue(msg);
         chatReference.child(chatRoomId).child("msgTimeStamp").setValue(time);
     }

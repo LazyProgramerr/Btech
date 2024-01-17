@@ -1,29 +1,41 @@
 package com.sai.btech.fragements;
 
+import static com.sai.btech.constants.btech.PRIVATE;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.sai.btech.R;
 import com.sai.btech.activities.SearchActivity;
+import com.sai.btech.adapters.RecentChatAdapter;
+import com.sai.btech.models.ChatRoomModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChatsFragment extends Fragment {
+    private DatabaseReference chatsReference;
+    RecentChatAdapter recentChatAdapter;
+    private List<ChatRoomModel> chatRoomModelList;
 
     public ChatsFragment() {
         // Required empty public constructor
     }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -34,7 +46,33 @@ public class ChatsFragment extends Fragment {
             Intent intent = new Intent(getContext(), SearchActivity.class);
             startActivity(intent);
         });
+        chatsReference = FirebaseDatabase.getInstance().getReference("chatRooms").child(PRIVATE);
+        chatsReference.keepSynced(true);
+        RecyclerView recyclerView = chatsFragment.findViewById(R.id.chatRoomsRecyclerView);
+        chatRoomModelList = new ArrayList<>();
+        fetchChatRooms(recyclerView);
 
         return chatsFragment;
+    }
+
+    private void fetchChatRooms(RecyclerView recyclerView) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recentChatAdapter = new RecentChatAdapter(getContext(),chatRoomModelList);
+        recyclerView.setAdapter(recentChatAdapter);
+        chatsReference.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                chatRoomModelList.clear();
+                for (DataSnapshot dataSnapshot:snapshot.getChildren()){
+                    ChatRoomModel chatRoomModel = dataSnapshot.getValue(ChatRoomModel.class);
+                    chatRoomModelList.add(chatRoomModel);
+                }
+                recentChatAdapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+
     }
 }
