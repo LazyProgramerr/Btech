@@ -1,0 +1,43 @@
+name: Build APK
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'adopt'
+        cache: 'gradle'
+        
+    - name: Make Gradlew Executable
+      run: chmod +x ./gradlew
+
+    - name: Build Debug APK
+      run: ./gradlew assembleDebug
+
+    - name: Build Release APK
+      run: ./gradlew assembleRelease
+      
+    - name: Upload Debug APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: Btech(debug)-apk
+        path: app/build/outputs/apk/debug/app-debug.apk
+    
+    - name: Upload Release APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: Btech(release)-apk
+        path: app/build/outputs/apk/release/app-release.apk
