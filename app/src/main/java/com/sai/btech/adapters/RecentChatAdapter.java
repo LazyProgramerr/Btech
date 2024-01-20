@@ -51,15 +51,17 @@ public class RecentChatAdapter extends RecyclerView.Adapter<RecentChatAdapter.Re
         if (chatRoomMembers.contains(ud.getuId())){
             if (chatRoomMembers.get(0).equals(ud.getuId())){
                 chatRoomNameId = chatRoomMembers.get(1);
-            }else chatRoomNameId = chatRoomMembers.get(0);
-            getData(context,chatRoomNameId,chatRoomName->{
-                holder.chatRoomName.setText(chatRoomModelList.get(position).getChatRoomName());
+            }else {
+                chatRoomNameId = chatRoomMembers.get(0);
+            }
+            getData(context,chatRoomNameId,ChatRoomName->{
+                holder.chatRoomName.setText(ChatRoomName);
                 Glide.with(context).load(chatRoomModelList.get(position).getChatRoomImage()).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.chatRoomImg);
 
                 holder.chatRoomName.setOnClickListener(v -> {
                     Intent intent = new Intent(context, ChatActivity.class);
                     intent.putExtra("chatRoomImage",chatRoomImage);
-                    intent.putExtra("chatRoomName",chatRoomName);
+                    intent.putExtra("chatRoomName",ChatRoomName);
                     intent.putExtra("chatRoomId",chatRoomId);
                     intent.putExtra("chatRoomType",PRIVATE);
                     intent.putExtra("chatRoomMembers",chatRoomMembers);

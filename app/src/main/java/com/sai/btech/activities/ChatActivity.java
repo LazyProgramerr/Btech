@@ -1,6 +1,8 @@
 package com.sai.btech.activities;
 
+import static com.sai.btech.firebase.firebaseData.getFCMTokens;
 import static com.sai.btech.managers.ChatRoomManager.CheckChatRoom;
+import static com.sai.btech.notification.SendNotificationUsingVolley.sendFCMNotification;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -64,7 +66,6 @@ public class ChatActivity extends AppCompatActivity {
         chatReference = FirebaseDatabase.getInstance().getReference("chatRooms").child(chatRoomType);
 
         setChat();
-
     }
 
     private void setChat() {
@@ -95,7 +96,15 @@ public class ChatActivity extends AppCompatActivity {
         if (!msg.isEmpty()){
             inputMsg.setText(null);
             send(msg,String.valueOf(System.currentTimeMillis()));
+            sendNotification(msg);
         }
+    }
+
+    private void sendNotification(String body) {
+        UserData ud = SharedPreferenceManager.getUserData(ChatActivity.this);
+        ArrayList<String> receivers = new ArrayList<>(chatRoomMembers);
+        receivers.remove(ud.getuId());
+        getFCMTokens(this,receivers,tokens -> sendFCMNotification(ChatActivity.this,tokens,chatRoomName,body));
     }
 
     private void send(String msg,String time) {
