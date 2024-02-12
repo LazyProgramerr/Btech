@@ -23,7 +23,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.sai.btech.R;
 import com.sai.btech.activities.SearchActivity;
 import com.sai.btech.adapters.RecentChatAdapter;
+import com.sai.btech.managers.SharedPreferenceManager;
 import com.sai.btech.models.ChatRoomModel;
+import com.sai.btech.models.UserData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,7 @@ public class ChatsFragment extends Fragment {
     private DatabaseReference chatsReference;
     RecentChatAdapter recentChatAdapter;
     private List<ChatRoomModel> chatRoomModelList;
+    private UserData ud;
 
     public ChatsFragment() {
         // Required empty public constructor
@@ -50,12 +53,14 @@ public class ChatsFragment extends Fragment {
         chatsReference.keepSynced(true);
         RecyclerView recyclerView = chatsFragment.findViewById(R.id.chatRoomsRecyclerView);
         chatRoomModelList = new ArrayList<>();
+        ud = SharedPreferenceManager.getUserData(requireContext());
         fetchChatRooms(recyclerView);
 
         return chatsFragment;
     }
 
     private void fetchChatRooms(RecyclerView recyclerView) {
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recentChatAdapter = new RecentChatAdapter(getContext(),chatRoomModelList);
         recyclerView.setAdapter(recentChatAdapter);
@@ -66,7 +71,10 @@ public class ChatsFragment extends Fragment {
                 chatRoomModelList.clear();
                 for (DataSnapshot dataSnapshot:snapshot.getChildren()){
                     ChatRoomModel chatRoomModel = dataSnapshot.getValue(ChatRoomModel.class);
-                    chatRoomModelList.add(chatRoomModel);
+                    assert chatRoomModel != null;
+                    if (chatRoomModel.getChatRoomMembers().contains(ud.getuId())){
+                        chatRoomModelList.add(chatRoomModel);
+                    }
                 }
                 recentChatAdapter.notifyDataSetChanged();
             }

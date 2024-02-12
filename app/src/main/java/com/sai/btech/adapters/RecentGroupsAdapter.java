@@ -1,8 +1,5 @@
 package com.sai.btech.adapters;
 
-import static com.sai.btech.constants.btech.PRIVATE;
-
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -44,25 +41,26 @@ public class RecentGroupsAdapter extends RecyclerView.Adapter<RecentGroupsAdapte
     @Override
     public void onBindViewHolder(@NonNull GroupViewsHolder holder, int position) {
         UserData ud = SharedPreferenceManager.getUserData(context);
-        String chatRoomName = chatRoomModelList.get(position).getChatRoomName();
-        String chatRoomImage = chatRoomModelList.get(position).getChatRoomImage();
-        ArrayList<String> chatRoomMembers = chatRoomModelList.get(position).getChatRoomMembers();
-        String chatRoomId = chatRoomModelList.get(position).getChatRoomId();
-        if (chatRoomMembers.contains(ud.getuId())){
-            holder.chatRoomName.setText(chatRoomName);
-            Glide.with(context).load(chatRoomImage).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.chatRoomImage);
+        if (chatRoomModelList != null){
+            String chatRoomName = chatRoomModelList.get(position).getChatRoomName();
+            String chatRoomImage = chatRoomModelList.get(position).getChatRoomImage();
+            ArrayList<String> chatRoomMembers = new ArrayList<>(chatRoomModelList.get(position).getChatRoomMembers());
+            String chatRoomId = chatRoomModelList.get(position).getChatRoomId();
+            if (chatRoomMembers.contains(ud.getuId())){
+                holder.chatRoomName.setText(chatRoomName);
+                Glide.with(context).load(chatRoomImage).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.chatRoomImage);
 
-            holder.chatRoomName.setOnClickListener(v -> {
-                Intent intent = new Intent(context, ChatActivity.class);
-                intent.putExtra("chatRoomImage",chatRoomImage);
-                intent.putExtra("chatRoomName",chatRoomName);
-                intent.putExtra("chatRoomId",chatRoomId);
-                intent.putExtra("chatRoomType","groups");
-                intent.putExtra("chatRoomMembers",chatRoomMembers);
-                context.startActivity(intent);
-            });
+                holder.chatRoomName.setOnClickListener(v -> {
+                    Intent intent = new Intent(context, ChatActivity.class);
+                    intent.putExtra("chatRoomImage",chatRoomImage);
+                    intent.putExtra("chatRoomName",chatRoomName);
+                    intent.putExtra("chatRoomId",chatRoomId);
+                    intent.putExtra("chatRoomType","groups");
+                    intent.putExtra("chatRoomMembers",chatRoomMembers);
+                    context.startActivity(intent);
+                });
+            }
         }
-
     }
 
     @Override

@@ -37,6 +37,7 @@ public class UserDetailsActivity extends AppCompatActivity {
     private ActivityUserDetailsBinding layoutWidgets;
     FirebaseUser firebaseUser;
     Bitmap userPhotoBitmap;
+    DatabaseReference tokenRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +49,7 @@ public class UserDetailsActivity extends AppCompatActivity {
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
+        tokenRef = FirebaseDatabase.getInstance().getReference("userTokens");
 
         switch(intent.getIntExtra("loginType",0)){
             case 0 -> new Handler().postDelayed(()->{
@@ -89,6 +91,7 @@ public class UserDetailsActivity extends AppCompatActivity {
 
                         userRef.child(firebaseUser.getUid()).setValue(uData).addOnCompleteListener(task -> {
                             if (task.isSuccessful()){
+                                tokenRef.child(uid).setValue(token);
                                 SharedPreferenceManager.saveUserData(UserDetailsActivity.this,name,mail,phone,imageUrl,uid);
                                 SharedPreferenceManager.saveLoginStatus(UserDetailsActivity.this,true);
                                 startActivity(new Intent(getApplicationContext(), HomeActivity.class));
@@ -127,6 +130,7 @@ public class UserDetailsActivity extends AppCompatActivity {
 
             userRef.child(firebaseUser.getUid()).setValue(uData).addOnCompleteListener(task -> {
                 if (task.isSuccessful()){
+                    tokenRef.child(uid).setValue(token);
                     SharedPreferenceManager.saveUserData(this,name,mail,phone,img,uid);
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                     finish();

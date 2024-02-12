@@ -4,17 +4,17 @@ import static com.sai.btech.firebase.firebaseData.getFCMTokens;
 import static com.sai.btech.managers.ChatRoomManager.CheckChatRoom;
 import static com.sai.btech.notification.SendNotificationUsingVolley.sendFCMNotification;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -66,6 +66,12 @@ public class ChatActivity extends AppCompatActivity {
         chatReference = FirebaseDatabase.getInstance().getReference("chatRooms").child(chatRoomType);
 
         setChat();
+        layoutWidgets.call.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), VoiceCallActivity.class);
+            intent.putExtra("chatRoomId",chatRoomId);
+            startActivity(intent);
+        });
+
     }
 
     private void setChat() {
@@ -104,7 +110,12 @@ public class ChatActivity extends AppCompatActivity {
         UserData ud = SharedPreferenceManager.getUserData(ChatActivity.this);
         ArrayList<String> receivers = new ArrayList<>(chatRoomMembers);
         receivers.remove(ud.getuId());
-        getFCMTokens(this,receivers,tokens -> sendFCMNotification(ChatActivity.this,tokens,chatRoomName,body));
+        Toast.makeText(this, "msg sent", Toast.LENGTH_SHORT).show();
+        getFCMTokens(this,receivers,tokens -> {
+            sendFCMNotification(ChatActivity.this,tokens,ud.getName(),body);
+            Toast.makeText(this, "notification sent", Toast.LENGTH_SHORT).show();
+        });
+
     }
 
     private void send(String msg,String time) {

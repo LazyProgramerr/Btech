@@ -1,17 +1,14 @@
 package com.sai.btech.authentication;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
-import com.sai.btech.R;
 import com.sai.btech.databinding.ActivitySignupBinding;
 import com.sai.btech.dialogs.Loading;
-
-import java.util.Objects;
 
 public class SignupActivity extends AppCompatActivity {
     private ActivitySignupBinding layoutWidgets;

@@ -44,35 +44,30 @@ public class RecentChatAdapter extends RecyclerView.Adapter<RecentChatAdapter.Re
     @Override
     public void onBindViewHolder(@NonNull RecentChatsViewHolder holder, int position) {
         UserData ud = SharedPreferenceManager.getUserData(context);
-        ArrayList<String> chatRoomMembers = chatRoomModelList.get(position).getChatRoomMembers();
-        String chatRoomImage = chatRoomModelList.get(position).getChatRoomImage();
-        String chatRoomId = chatRoomModelList.get(position).getChatRoomId();
-        String chatRoomNameId;
-        if (chatRoomMembers.contains(ud.getuId())){
+        if (chatRoomModelList != null){
+            ArrayList<String> chatRoomMembers = new ArrayList<>(chatRoomModelList.get(position).getChatRoomMembers());
+            String chatRoomId = chatRoomModelList.get(position).getChatRoomId();
+            String chatRoomNameId;
             if (chatRoomMembers.get(0).equals(ud.getuId())){
                 chatRoomNameId = chatRoomMembers.get(1);
             }else {
                 chatRoomNameId = chatRoomMembers.get(0);
             }
-            getData(context,chatRoomNameId,ChatRoomName->{
-                holder.chatRoomName.setText(ChatRoomName);
-                Glide.with(context).load(chatRoomModelList.get(position).getChatRoomImage()).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.chatRoomImg);
+            getData(context,chatRoomNameId,userData->{
+                holder.chatRoomName.setText(userData.get("name"));
+                Glide.with(context).load(userData.get("image")).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.chatRoomImg);
 
                 holder.chatRoomName.setOnClickListener(v -> {
                     Intent intent = new Intent(context, ChatActivity.class);
-                    intent.putExtra("chatRoomImage",chatRoomImage);
-                    intent.putExtra("chatRoomName",ChatRoomName);
+                    intent.putExtra("chatRoomImage",userData.get("image"));
+                    intent.putExtra("chatRoomName",userData.get("name"));
                     intent.putExtra("chatRoomId",chatRoomId);
                     intent.putExtra("chatRoomType",PRIVATE);
                     intent.putExtra("chatRoomMembers",chatRoomMembers);
                     context.startActivity(intent);
                 });
             });
-        } else {
-            chatRoomNameId = "";
         }
-
-
     }
 
     @Override

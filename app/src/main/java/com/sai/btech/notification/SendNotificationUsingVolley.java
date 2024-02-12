@@ -5,6 +5,7 @@ import static com.sai.btech.constants.btech.FCM_SERVER_KEY;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,53 +22,57 @@ import java.util.ArrayList;
 
 public class SendNotificationUsingVolley {
     public static void sendFCMNotification(Context context, ArrayList<String> toList, String title, String body) {
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        for (String t:toList) {
+            RequestQueue requestQueue = Volley.newRequestQueue(context);
 
-        JSONObject jsonBody = new JSONObject();
-        try {
-            // Use "to" field instead of "registration_ids" for newer versions of FCM
-            jsonBody.put("to", getToParameter(toList));
+            JSONObject jsonBody = new JSONObject();
+            try {
+                jsonBody.put("to",t);
 
-            JSONObject data = new JSONObject();
-            data.put("title", title);
-            data.put("body", body);
+                JSONObject data = new JSONObject();
+                data.put("title", title);
+                data.put("body", body);
 
-            jsonBody.put("data", data);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, FCM_SEND_URL, jsonBody,
-                response -> Log.d("FCM Response", "Response: " + response.toString()),
-                error -> Log.e("FCM Error", "Error: " + error.toString())) {
-            @Override
-            public String getBodyContentType() {
-                return "application/json; charset=utf-8";
+                jsonBody.put("data", data);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
 
-            @Override
-            public byte[] getBody() {
-                return jsonBody.toString().getBytes();
-            }
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, FCM_SEND_URL, jsonBody,
+                    response -> Log.d("FCM Response", "Response: " + response.toString()),
+                    error -> Log.e("FCM Error", "Error: " + error.toString())) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
 
-            @Override
-            public java.util.Map<String, String> getHeaders() {
-                java.util.Map<String, String> headers = new java.util.HashMap<>();
-                headers.put("Authorization", "key=" + FCM_SERVER_KEY);
-                headers.put("Content-Type", "application/json");
-                return headers;
-            }
-        };
+                @Override
+                public byte[] getBody() {
+                    return jsonBody.toString().getBytes();
+                }
 
-        requestQueue.add(jsonObjectRequest);
-    }
+                @Override
+                public java.util.Map<String, String> getHeaders() {
+                    java.util.Map<String, String> headers = new java.util.HashMap<>();
+                    headers.put("Authorization", "key=" + FCM_SERVER_KEY);
+                    headers.put("Content-Type", "application/json");
+                    return headers;
+                }
+            };
 
-    private static String getToParameter(ArrayList<String> toList) throws JSONException {
-        if (toList.size() == 1) {
-            return toList.get(0);
-        } else {
-            JSONArray toJSONArray = new JSONArray(toList);
-            return toJSONArray.toString();
+            requestQueue.add(jsonObjectRequest);
         }
     }
+
+//    private static String getToParameter(ArrayList<String> toList) throws JSONException {
+//        if (toList == null || toList.isEmpty()) {
+//            return "";
+//        } else if (toList.size() == 1) {
+//            return toList.get(0);
+//        } else {
+//            JSONArray toJSONArray = new JSONArray(toList);
+//            return toJSONArray.toString();
+//        }
+//    }
+
 }

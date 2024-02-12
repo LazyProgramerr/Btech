@@ -13,11 +13,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.sai.btech.models.UserData;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class firebaseData {
     public interface DataCallBack{
-        void onDataReceived(String name);
+        void onDataReceived(HashMap<String,String> data);
     }public interface FCMCallBack{
         void onTokensReceived(ArrayList<String> tokens);
     }
@@ -29,8 +30,12 @@ public class firebaseData {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds :snapshot.getChildren()){
                     String name = String.valueOf(ds.child("Name").getValue());
-                    if (!name.isEmpty()){
-                        callBack.onDataReceived(name);
+                    String image = String.valueOf(ds.child("userImg").getValue());
+                    if (!name.isEmpty() && !image.isEmpty()){
+                        HashMap<String,String> data = new HashMap<>();
+                        data.put("name",name);
+                        data.put("image",image);
+                        callBack.onDataReceived(data);
                     }
                 }
             }
@@ -39,32 +44,33 @@ public class firebaseData {
         });
     }
     public static void getFCMTokens(Context context, ArrayList<String> members, FCMCallBack callBack) {
-        DatabaseReference userReference = FirebaseDatabase.getInstance().getReference("Users");
+        DatabaseReference tokenReference = FirebaseDatabase.getInstance().getReference("userTokens");
         ArrayList<String> fcmTokens = new ArrayList<>();
-        // Iterate through the list of member IDs
-        for (String memberId : members) {
-            Query q = userReference.orderByChild("uId").equalTo(memberId);
-            q.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        // Assuming "fcmToken" is the key where FCM token is stored in the database
-                        String fcmToken = String.valueOf(ds.child("Token").getValue());
-                        // Check if the FCM token is not empty and not already in the list
+
+        tokenReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (String memberId : members) {
+                    String fcmToken;
+                    if (memberId != null){
+                        fcmToken = String.valueOf(snapshot.child(memberId).getValue());
                         if (!fcmToken.isEmpty() && !fcmTokens.contains(fcmToken)) {
                             fcmTokens.add(fcmToken);
                         }
                     }
-                    // Check if we have fetched FCM tokens for all members
-                    if (fcmTokens.size() == members.size()) {
-                        callBack.onTokensReceived(fcmTokens);
-                    }
+                    // Check if the token is not empty
                 }
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {}
-            });
-        }
+
+                // Check if we have fetched FCM tokens for all members
+                if (fcmTokens.size() == members.size()) {
+                    callBack.onTokensReceived(fcmTokens);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle onCancelled if needed
+            }
+        });
     }
-
-
 }

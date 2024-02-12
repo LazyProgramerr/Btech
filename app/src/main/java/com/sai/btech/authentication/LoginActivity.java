@@ -150,8 +150,10 @@ public class LoginActivity extends AppCompatActivity{
                 } else {
 //                    generate token and add to database
                     Token.getToken(LoginActivity.this, token -> {
-                        DatabaseReference dr = FirebaseDatabase.getInstance().getReference("Users/"+uid);
-                        dr.child("Token").setValue(token);
+                        DatabaseReference dr = FirebaseDatabase.getInstance().getReference("Users");
+                        DatabaseReference tR = FirebaseDatabase.getInstance().getReference("userTokens");
+                        dr.child(uid).child("Token").setValue(token);
+                        tR.child(uid).setValue(token);
                     });
                     setDetailsInLocal(usersReference,uid);
                     SharedPreferenceManager.saveLoginStatus(LoginActivity.this,true);

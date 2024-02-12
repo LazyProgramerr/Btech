@@ -4,4 +4,5 @@
     <string name="profile">profile</string>
     <string name="groups">Groups</string>
     <string name="chats">Chats</string>
+    <string name="new_group">create new Group</string>
 </resources>

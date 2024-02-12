@@ -56,9 +56,7 @@ public class HomeActivity extends AppCompatActivity {
             }
             return null;
         });
-        layoutWidgets.topPanelOptions.setOnClickListener(v -> {
-            show(layoutWidgets.topPanelOptions);
-        });
+        layoutWidgets.topPanelOptions.setOnClickListener(v -> show(layoutWidgets.topPanelOptions));
     }
     private void show(View view) {
         PopupMenu popupMenu = new PopupMenu(this,view);

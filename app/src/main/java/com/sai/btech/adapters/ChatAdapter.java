@@ -1,13 +1,5 @@
 package com.sai.btech.adapters;
 
-import static com.sai.btech.constants.btech.LEFT;
-import static com.sai.btech.constants.btech.PRIVATE;
-import static com.sai.btech.constants.btech.REPLAY_LEFT;
-import static com.sai.btech.constants.btech.REPLAY_RIGHT;
-import static com.sai.btech.constants.btech.RIGHT;
-
-import static java.lang.System.in;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
@@ -23,8 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.imageview.ShapeableImageView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.sai.btech.R;
 import com.sai.btech.managers.SharedPreferenceManager;
 import com.sai.btech.models.ChatMessageModel;
@@ -72,13 +62,31 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatModelViewH
             Glide.with(context).load(img).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.profileL);
             holder.msgL.setText(msg);
         }
-        holder.chatBubbleHolder.setOnLongClickListener(v -> {
+        holder.leftLayout.setOnLongClickListener(v -> {
+            isSelectable = true;
+            selectedChatId.add(id);
+            holder.chatBubbleHolder.setBackgroundColor(R.color.green);
+            return true;
+        });holder.rightLayout.setOnLongClickListener(v -> {
             isSelectable = true;
             selectedChatId.add(id);
             holder.chatBubbleHolder.setBackgroundColor(R.color.green);
             return true;
         });
-        holder.chatBubbleHolder.setOnClickListener(v -> {
+        holder.leftLayout.setOnClickListener(v -> {
+            if(isSelectable){
+                if(selectedChatId.contains(id)){
+                    holder.chatBubbleHolder.setBackgroundColor(Color.TRANSPARENT);
+                    selectedChatId.remove(id);
+                }else {
+                    holder.chatBubbleHolder.setBackgroundColor(R.color.green);
+                    selectedChatId.add(id);
+                }
+                if (selectedChatId.isEmpty()){
+                    isSelectable = false;
+                }
+            }
+        });holder.rightLayout.setOnClickListener(v -> {
             if(isSelectable){
                 if(selectedChatId.contains(id)){
                     holder.chatBubbleHolder.setBackgroundColor(Color.TRANSPARENT);

@@ -15,6 +15,8 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.sai.btech.R;
 import com.sai.btech.activities.WelcomeActivity;
 
+import java.util.HashMap;
+
 @SuppressLint("MissingFirebaseInstanceTokenRefresh")
 public class FirebaseMessaging extends FirebaseMessagingService {
 
@@ -23,23 +25,22 @@ public class FirebaseMessaging extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
-
-        // Check if message contains a notification payload
-        if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-
-            // Handle the notification payload here
-            sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
-        }
 
         // Check if message contains a data payload
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-
             // Handle the data payload here
+            String dataTitle = remoteMessage.getData().get("title");
+            String dataBody = remoteMessage.getData().get("body");
+
+            if (dataTitle != null && dataBody != null) {
+                Log.d(TAG, "Data Title: " + dataTitle);
+                Log.d(TAG, "Data Body: " + dataBody);
+                sendNotification(dataTitle, dataBody);
+            }
         }
     }
+
 
     private void sendNotification(String title, String messageBody) {
         Intent intent = new Intent(this, WelcomeActivity.class);
