@@ -20,3 +20,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -keep class com.sai.btech.models.** {*;}
+-keep class com.sai.btech.activities.RtcEngineEventHandler {*;}
+-keep class io.agora.**{*;}
+-dontwarn com.google.devtools.build.android.desugar.runtime.ThrowableExtension

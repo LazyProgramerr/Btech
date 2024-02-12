@@ -69,6 +69,8 @@ public class ChatActivity extends AppCompatActivity {
         layoutWidgets.call.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), VoiceCallActivity.class);
             intent.putExtra("chatRoomId",chatRoomId);
+            intent.putExtra("chatRoomImage",chatRoomImage);
+            intent.putExtra("chatRoomType",chatRoomType);
             startActivity(intent);
         });
 

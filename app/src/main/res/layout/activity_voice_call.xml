@@ -6,13 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".activities.VoiceCallActivity">
 
+    <ImageView
+        android:id="@+id/callDp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/t_img"
+        android:contentDescription="@string/app_name"/>
+
     <ImageButton
         android:id="@+id/end"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@android:color/transparent"
         android:src="@drawable/phone_icon"
-        android:outlineSpotShadowColor="#af5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
