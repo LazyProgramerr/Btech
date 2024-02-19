@@ -82,7 +82,7 @@
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_marginHorizontal="@dimen/_5sdp"
-        android:layout_height="@dimen/_40sdp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/_3sdp" />
 
 </RelativeLayout>

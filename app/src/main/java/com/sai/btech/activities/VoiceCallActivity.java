@@ -2,7 +2,14 @@ package com.sai.btech.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -20,6 +27,8 @@ import com.sai.btech.managers.SharedPreferenceManager;
 import com.sai.btech.models.UserData;
 
 import java.util.ArrayList;
+import java.util.Set;
+
 import io.agora.rtc2.Constants;
 import io.agora.rtc2.RtcEngine;
 
@@ -42,7 +51,7 @@ public class VoiceCallActivity extends AppCompatActivity {
         String chatRoomType = i.getString("chatRoomType");
         String chatRoomImage = i.getString("chatRoomImage");
         receivers = i.getStringArrayList("receiversIds");
-        String path = "chatRooms/"+chatRoomType+"/"+AGORA_CHANNEL_NAME;
+        String path = "chatRooms/" + chatRoomType + "/" + AGORA_CHANNEL_NAME;
         callRef = FirebaseDatabase.getInstance().getReference(path);
         appId = "dcd1be87add74e718246bda20ce52817";
         initializeAgoraEngine();
@@ -51,7 +60,10 @@ public class VoiceCallActivity extends AppCompatActivity {
         joinChannel();
 
         ImageButton end = findViewById(R.id.end);
-        end.setOnClickListener(v -> leaveChannel());
+        end.setOnClickListener(v -> {
+            leaveChannel();
+            finish();
+        });
     }
 
     private void Join() {
@@ -146,6 +158,47 @@ public class VoiceCallActivity extends AppCompatActivity {
 
     private void joinChannel() {
         rtcEngine.joinChannel(null, AGORA_CHANNEL_NAME, null, 0);
+        setAudioOutput();
+    }
+
+    private void setAudioOutput() {
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter != null && bluetoothAdapter.isEnabled()) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            Set<BluetoothDevice> devices = bluetoothAdapter.getBondedDevices();
+            for (BluetoothDevice device : devices) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                if (device.getType() == BluetoothDevice.DEVICE_TYPE_DUAL && audioManager.isBluetoothScoOn()) {
+                    audioManager.setMode(AudioManager.MODE_IN_CALL);
+                    audioManager.startBluetoothSco();
+                    audioManager.setBluetoothScoOn(true);
+                    audioManager.setSpeakerphoneOn(false);
+                    break;
+                }
+            }
+        }else{
+            audioManager.setMode(AudioManager.MODE_IN_CALL);
+            audioManager.setSpeakerphoneOn(false);
+        }
     }
 
     @Override

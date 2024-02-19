@@ -44,7 +44,8 @@ public class RecentGroupsAdapter extends RecyclerView.Adapter<RecentGroupsAdapte
         if (chatRoomModelList != null){
             String chatRoomName = chatRoomModelList.get(position).getChatRoomName();
             String chatRoomImage = chatRoomModelList.get(position).getChatRoomImage();
-            ArrayList<String> chatRoomMembers = new ArrayList<>(chatRoomModelList.get(position).getChatRoomMembers());
+            ArrayList<String> chatRoomMembers = new ArrayList<>();
+            if (chatRoomModelList.get(position).getChatRoomMembers() != null) chatRoomMembers.addAll(chatRoomModelList.get(position).getChatRoomMembers());
             String chatRoomId = chatRoomModelList.get(position).getChatRoomId();
             if (chatRoomMembers.contains(ud.getuId())){
                 holder.chatRoomName.setText(chatRoomName);

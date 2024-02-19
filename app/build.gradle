@@ -16,6 +16,14 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    splits{
+        abi {
+            enable true
+            reset()
+            include "armeabi-v7a","arm64-v8a"
+            universalApk false
+        }
+    }
     signingConfigs {
         release {
             storeFile file("keys.jks")

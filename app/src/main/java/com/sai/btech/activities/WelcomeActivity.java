@@ -22,7 +22,8 @@ public class WelcomeActivity extends AppCompatActivity {
             Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO,
             Manifest.permission.POST_NOTIFICATIONS,
-            Manifest.permission.DETECT_SCREEN_CAPTURE
+            Manifest.permission.DETECT_SCREEN_CAPTURE,
+            Manifest.permission.BLUETOOTH
     };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
