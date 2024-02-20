@@ -35,7 +35,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Btech-debug-${{ matrix.abi }}
-          path: app/build/outputs/apk/debug/app-{{matrix.abi}}-debug.apk
+          path: app/build/outputs/apk/debug/app-${{matrix.abi}}-debug.apk
 
       - name: Build Release APK
         run: ./gradlew assembleRelease
@@ -44,4 +44,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: Btech-release-${{ matrix.abi }}
-          path: app/build/outputs/apk/release/app-{{matrix.abi}}-release.apk
+          path: app/build/outputs/apk/release/app-${{matrix.abi}}-release.apk
