@@ -9,6 +9,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        abi: [armeabi-v7a, arm64-v8a,x86,x86_64]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -26,17 +31,17 @@ jobs:
       - name: Build Debug APK
         run: ./gradlew assembleDebug
 
-      - name: Build Release APK
-        run: ./gradlew assembleRelease
-
       - name: Upload Debug APK
         uses: actions/upload-artifact@v3
         with:
-          name: Btech-debug
-          path: app/build/outputs/apk/debug/*.apk
+          name: Btech-debug-${{ matrix.abi }}
+          path: app/build/outputs/apk/debug/app-{{matrix.abi}}-debug.apk
+
+      - name: Build Release APK
+        run: ./gradlew assembleRelease
 
       - name: Upload Release APK
         uses: actions/upload-artifact@v3
         with:
-          name: Btech-release
-          path: app/build/outputs/apk/release/*.apk
+          name: Btech-release-${{ matrix.abi }}
+          path: app/build/outputs/apk/release/app-{{matrix.abi}}-release.apk
