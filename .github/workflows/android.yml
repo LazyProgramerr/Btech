@@ -1,4 +1,4 @@
-name: Build APK
+name: Build and Upload APKs
 
 on:
   push:
@@ -11,33 +11,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-      
-    - name: Set up Java
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'adopt'
-        cache: 'gradle'
-        
-    - name: Make Gradlew Executable
-      run: chmod +x ./gradlew
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Build Debug APK
-      run: ./gradlew assembleDebug
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+          cache: 'gradle'
 
-    - name: Build Release APK
-      run: ./gradlew assembleRelease
-      
-    - name: Upload Debug APK
-      uses: actions/upload-artifact@v3
-      with:
-        name: Btech(app-arm64-v8a-debug)-apk
-        path: app/build/outputs/apk/debug/app-arm64-v8a-debug.apk
-    
-    - name: Upload Release APK
-      uses: actions/upload-artifact@v3
-      with:
-        name: Btech(app-arm64-v8a-release)-apk
-        path: app/build/outputs/apk/release/app-arm64-v8a-release.apk
+      - name: Make Gradlew Executable
+        run: chmod +x ./gradlew
+
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
+
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: Btech-debug-${{ matrix.abi }}
+          path: app/build/outputs/apk/debug/*.apk
+
+      - name: Build Release APK
+        run: ./gradlew assembleRelease
+
+      - name: Upload Release APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: Btech-release-${{ matrix.abi }}
+          path: app/build/outputs/apk/release/*.apk
+
+  matrix:
+    include:
+      - abi: armeabi-v7a
+      - abi: arm64-v8a
+      - abi: x86
+      - abi: x86_64

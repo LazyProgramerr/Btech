@@ -73,6 +73,7 @@ public class ChatActivity extends AppCompatActivity {
             intent.putExtra("chatRoomImage",chatRoomImage);
             intent.putExtra("chatRoomType",chatRoomType);
             startActivity(intent);
+            sendNotification(chatRoomName,"call");
         });
 
     }
@@ -105,17 +106,16 @@ public class ChatActivity extends AppCompatActivity {
         if (!msg.isEmpty()){
             inputMsg.setText(null);
             send(msg,String.valueOf(System.currentTimeMillis()));
-            sendNotification(msg);
+            sendNotification(msg,"chat");
         }
     }
-
-    private void sendNotification(String body) {
+    private void sendNotification(String body,String type) {
         UserData ud = SharedPreferenceManager.getUserData(ChatActivity.this);
         ArrayList<String> receivers = new ArrayList<>(chatRoomMembers);
         receivers.remove(ud.getuId());
         Toast.makeText(this, "msg sent", Toast.LENGTH_SHORT).show();
         getFCMTokens(this,receivers,tokens -> {
-            sendFCMNotification(ChatActivity.this,tokens,ud.getName(),body);
+            sendFCMNotification(ChatActivity.this,tokens,ud.getName(),body,type);
             Toast.makeText(this, "notification sent", Toast.LENGTH_SHORT).show();
         });
 
