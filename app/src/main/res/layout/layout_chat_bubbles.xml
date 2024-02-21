@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:maxHeight="@dimen/_500sdp"
     android:id="@+id/chatBubbleHolder">
     <RelativeLayout
@@ -79,5 +79,51 @@
                 android:text="@string/app_name"/>
         </LinearLayout>
     </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/rightImageLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_corners"
+        android:backgroundTint="@color/transparentOrange"
+        android:orientation="horizontal"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/_3sdp"
+        tools:ignore="UselessParent">
+        <include
+            android:id="@+id/rightProfile1"
+            layout="@layout/layout_profile_pic"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_margin="@dimen/_5sdp"/>
+        <ImageView
+            android:id="@+id/rightImage"
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="@dimen/_250sdp"
+            app:srcCompat="@drawable/t_img"
+            android:paddingEnd="@dimen/_5sdp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/leftImageLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_corners"
+        android:backgroundTint="@color/transparentOrange"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/_3sdp"
+        tools:ignore="UselessParent">
+        <include
+            android:id="@+id/leftProfile1"
+            layout="@layout/layout_profile_pic"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_margin="@dimen/_5sdp"/>
+        <ImageView
+            android:id="@+id/leftImage"
+            android:layout_width="@dimen/_150sdp"
+            android:layout_height="@dimen/_250sdp"
+            app:srcCompat="@drawable/t_img"
+            android:paddingEnd="@dimen/_5sdp"/>
+    </LinearLayout>
 
 </RelativeLayout>

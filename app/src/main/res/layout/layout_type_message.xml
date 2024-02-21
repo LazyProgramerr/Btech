@@ -15,7 +15,7 @@
         android:minHeight="@dimen/_40sdp"
         android:maxLines="6"
         android:maxHeight="@dimen/_100sdp"
-        android:layout_toStartOf="@+id/sendBtn"
+        android:layout_toStartOf="@+id/optionsPanel"
         android:layout_marginStart="@dimen/_10sdp"
         android:paddingHorizontal="@dimen/_5sdp"
         android:hint="enter your message"
@@ -26,8 +26,16 @@
         android:singleLine="false"
         android:importantForAutofill="no" />
     <ImageButton
+        android:id="@+id/optionsPanel"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_toStartOf="@id/sendBtn"
+        android:background="@color/transparent"
+        android:src="@drawable/three_dots"
+        android:contentDescription="@string/app_name" />
+    <ImageButton
         android:id="@+id/sendBtn"
-        android:layout_width="@dimen/_40sdp"
+        android:layout_width="@dimen/_30sdp"
         android:layout_height="@dimen/_40sdp"
         android:layout_alignParentEnd="true"
         android:layout_alignBottom="@id/userMessage"

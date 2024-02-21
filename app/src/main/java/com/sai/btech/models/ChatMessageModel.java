@@ -7,15 +7,17 @@ public class ChatMessageModel {
     private String senderId;
     private String timestamp;
     private String senderImg;
+    private String msgType;
 
     public ChatMessageModel() {
     }
 
-    public ChatMessageModel(String message, String senderId, String timestamp,String senderImg) {
+    public ChatMessageModel(String message, String senderId, String timestamp,String senderImg,String msgType) {
         this.message = message;
         this.senderId = senderId;
         this.timestamp = timestamp;
         this.senderImg = senderImg;
+        this.msgType = msgType;
     }
 
     public String getSenderImg() {
@@ -48,5 +50,13 @@ public class ChatMessageModel {
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getMsgType() {
+        return msgType;
+    }
+
+    public void setMsgType(String msgType) {
+        this.msgType = msgType;
     }
 }
