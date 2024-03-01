@@ -27,6 +27,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -44,6 +45,7 @@ import com.sai.btech.R;
 import com.sai.btech.adapters.ChatAdapter;
 import com.sai.btech.databinding.ActivityChatBinding;
 import com.sai.btech.firebase.UploadToStorage;
+import com.sai.btech.firebase.firebaseData;
 import com.sai.btech.managers.SharedPreferenceManager;
 import com.sai.btech.models.ChatMessageModel;
 import com.sai.btech.models.UserData;
@@ -59,9 +61,11 @@ public class ChatActivity extends AppCompatActivity {
     private ActivityChatBinding layoutWidgets;
     DatabaseReference chatReference;
     String chatRoomImage,chatRoomType,chatRoomId,chatRoomName;
-    ArrayList<String> chatRoomMembers = new ArrayList<>();
+    ArrayList<String> chatRoomMembers = new ArrayList<>(),userTokens = new ArrayList<>();
     ChatAdapter chatAdapter;
     List<ChatMessageModel> chatMessageModelList;
+    UserData ud ;
+    Uri sharedImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +79,14 @@ public class ChatActivity extends AppCompatActivity {
         chatRoomId = i.getStringExtra("chatRoomId");
         chatRoomType = i.getStringExtra("chatRoomType");
         chatRoomMembers = i.getStringArrayListExtra("chatRoomMembers");
+        sharedImageUri = i.getParcelableExtra("sharedImage");
+        if (sharedImageUri != null){
+            UCrop.of(sharedImageUri, Uri.fromFile(new File(this.getCacheDir(), "cropped_image.jpg")))
+                    .start(this);
+//            Toast.makeText(this, "success it has data", Toast.LENGTH_SHORT).show();
+        }//else {
+//            Toast.makeText(this, "success it doesn't had data", Toast.LENGTH_SHORT).show();
+//        }
 
         CheckChatRoom(this,chatRoomName,chatRoomId,chatRoomType,chatRoomMembers,chatRoomImage);
 
@@ -82,19 +94,22 @@ public class ChatActivity extends AppCompatActivity {
         layoutWidgets.chatRoomName.setText(chatRoomName);
         Glide.with(this).load(chatRoomImage).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.default_user_icon).into(layoutWidgets.chatRoomImage.getRoot());
         chatMessageModelList = new ArrayList<>();
+        ud = SharedPreferenceManager.getUserData(this);
 
         assert chatRoomType != null;
         chatReference = FirebaseDatabase.getInstance().getReference("chatRooms").child(chatRoomType);
 
         setChat();
+        layoutWidgets.back.setOnClickListener(v -> finish());
         layoutWidgets.call.setOnClickListener(v -> {
             Intent intent = new Intent(getApplicationContext(), VoiceCallActivity.class);
             intent.putExtra("chatRoomId",chatRoomId);
             intent.putExtra("chatRoomImage",chatRoomImage);
             intent.putExtra("chatRoomType",chatRoomType);
             startActivity(intent);
-            sendNotification(chatRoomName,"call");
+            sendNotification(chatRoomName,"call","call");
         });
+        getTokens(chatRoomMembers);
         EditText textMsg = findViewById(R.id.userMessage);
         ImageButton optionsPanel = findViewById(R.id.optionsPanel);
         textMsg.addTextChangedListener(new TextWatcher() {
@@ -124,7 +139,10 @@ public class ChatActivity extends AppCompatActivity {
             ShapeableImageView opt6 = view.findViewById(R.id.option6);
 
             opt1.setOnClickListener(v1 -> Toast.makeText(this, "opt1", Toast.LENGTH_SHORT).show());
-            opt2.setOnClickListener(v2 -> pickImage());
+            opt2.setOnClickListener(v2 -> {
+                pickImage();
+                dialog.dismiss();
+            });
             opt3.setOnClickListener(v3 -> Toast.makeText(this, "opt3", Toast.LENGTH_SHORT).show());
             opt4.setOnClickListener(v4 -> Toast.makeText(this, "opt4", Toast.LENGTH_SHORT).show());
             opt5.setOnClickListener(v5 -> Toast.makeText(this, "opt5", Toast.LENGTH_SHORT).show());
@@ -133,9 +151,15 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+    private void getTokens(ArrayList<String> chatMembers) {
+        chatMembers.remove(ud.getuId());
+        getFCMTokens(this, chatMembers, tokens ->
+                userTokens.addAll(tokens));
+    }
+
     private void setChat() {
         layoutWidgets.chatRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        chatAdapter = new ChatAdapter(this,chatRoomType,chatMessageModelList);
+        chatAdapter = new ChatAdapter(this,chatRoomType,chatMessageModelList,chatRoomId);
         layoutWidgets.chatRecyclerView.setAdapter(chatAdapter);
         Query query = chatReference.child(chatRoomId).child("chats");
         query.addValueEventListener(new ValueEventListener() {
@@ -161,19 +185,16 @@ public class ChatActivity extends AppCompatActivity {
         if (!msg.isEmpty()){
             inputMsg.setText(null);
             send(msg,String.valueOf(System.currentTimeMillis()),"text");
-            sendNotification(msg,"chat");
+            sendNotification(msg,"chat","text");
         }
     }
-    private void sendNotification(String body,String type) {
+    private void sendNotification(String body,String type,String contentType) {
         UserData ud = SharedPreferenceManager.getUserData(ChatActivity.this);
         ArrayList<String> receivers = new ArrayList<>(chatRoomMembers);
         receivers.remove(ud.getuId());
         Toast.makeText(this, "msg sent", Toast.LENGTH_SHORT).show();
-        getFCMTokens(this,receivers,tokens -> {
-            sendFCMNotification(ChatActivity.this,tokens,ud.getName(),body,type);
-            Toast.makeText(this, "notification sent", Toast.LENGTH_SHORT).show();
-        });
-
+        sendFCMNotification(ChatActivity.this,userTokens,ud.getName(),body,type,contentType);
+        Toast.makeText(this, "notification sent", Toast.LENGTH_SHORT).show();
     }
 
     private void send(String msg,String time,String msgType) {
@@ -237,12 +258,14 @@ public class ChatActivity extends AppCompatActivity {
              Bitmap userPhotoBitmap = uriToBitmap(croppedImageUri);
             assert userPhotoBitmap != null;
             String time = String.valueOf(System.currentTimeMillis());
+            sharedImageUri = null;
             UploadToStorage.uploadImage(this, userPhotoBitmap, chatRoomId + "/" + time, new UploadToStorage.UploadImageCallback() {
                 @Override
                 public void onImageUpload(String imageUrl) {
                     send(imageUrl,time,"image");
-                    sendNotification(imageUrl,"chat");
+                    sendNotification(imageUrl,"chat","image");
                     Toast.makeText(ChatActivity.this, "sent successfully", Toast.LENGTH_SHORT).show();
+
                 }
 
                 @Override

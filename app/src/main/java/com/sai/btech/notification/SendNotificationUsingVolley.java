@@ -21,7 +21,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class SendNotificationUsingVolley {
-    public static void sendFCMNotification(Context context, ArrayList<String> toList, String title, String body,String notificationType) {
+    public static void sendFCMNotification(Context context, ArrayList<String> toList, String title, String body,String notificationType,String notificationInfoType) {
         for (String t:toList) {
             RequestQueue requestQueue = Volley.newRequestQueue(context);
 
@@ -33,6 +33,7 @@ public class SendNotificationUsingVolley {
                 data.put("title", title);
                 data.put("body", body);
                 data.put("NotifyType",notificationType);
+                data.put("notificationInfoType",notificationInfoType);
 
                 jsonBody.put("data", data);
             } catch (JSONException e) {

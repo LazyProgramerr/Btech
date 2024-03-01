@@ -88,19 +88,22 @@
         android:orientation="horizontal"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="@dimen/_3sdp"
+        android:layout_marginBottom="@dimen/_1sdp"
         tools:ignore="UselessParent">
         <include
             android:id="@+id/rightProfile1"
             layout="@layout/layout_profile_pic"
             android:layout_height="@dimen/_20sdp"
             android:layout_width="@dimen/_20sdp"
-            android:layout_margin="@dimen/_5sdp"/>
+            android:layout_margin="@dimen/_5sdp" />
         <ImageView
             android:id="@+id/rightImage"
             android:layout_width="@dimen/_150sdp"
             android:layout_height="@dimen/_250sdp"
             app:srcCompat="@drawable/t_img"
-            android:paddingEnd="@dimen/_5sdp"/>
+            android:scaleType="fitXY"
+            android:paddingEnd="@dimen/_5sdp"
+            android:paddingVertical="@dimen/_5sdp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -111,6 +114,7 @@
         android:backgroundTint="@color/transparentOrange"
         android:orientation="horizontal"
         android:layout_marginTop="@dimen/_3sdp"
+        android:layout_marginBottom="@dimen/_1sdp"
         tools:ignore="UselessParent">
         <include
             android:id="@+id/leftProfile1"
@@ -123,7 +127,9 @@
             android:layout_width="@dimen/_150sdp"
             android:layout_height="@dimen/_250sdp"
             app:srcCompat="@drawable/t_img"
-            android:paddingEnd="@dimen/_5sdp"/>
+            android:paddingEnd="@dimen/_5sdp"
+            android:scaleType="fitXY"
+            android:paddingVertical="@dimen/_5sdp"/>
     </LinearLayout>
 
 </RelativeLayout>

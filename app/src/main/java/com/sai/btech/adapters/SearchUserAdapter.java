@@ -3,6 +3,7 @@ package com.sai.btech.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -32,9 +34,11 @@ public class SearchUserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     @SuppressLint("StaticFieldLeak")
     static Context context;
     List<UserListModel> usersList;
-    public SearchUserAdapter(Context context, List<UserListModel> usersList) {
+    static Uri sharedImage;
+    public SearchUserAdapter(Context context, List<UserListModel> usersList,@Nullable Uri SharedImg) {
         SearchUserAdapter.context = context;
         this.usersList = usersList;
+        sharedImage = SharedImg;
     }
     @Override
     public int getItemViewType(int position) {
@@ -94,6 +98,7 @@ public class SearchUserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 intent.putExtra("chatRoomId", ChatRoomId(SharedPreferenceManager.getUserData(context).getuId(), user.getuId()));
                 intent.putExtra("chatRoomType", PRIVATE);
                 intent.putStringArrayListExtra("chatRoomMembers", chatRoomMembers);
+                intent.putExtra("sharedImage",sharedImage);
                 context.startActivity(intent);
             });
         }

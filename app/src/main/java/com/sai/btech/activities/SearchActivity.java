@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,14 +36,24 @@ public class SearchActivity extends AppCompatActivity {
         usersReference = FirebaseDatabase.getInstance().getReference("Users");
         usersReference.keepSynced(true);
 
+        Uri sharedImageUri = null;
+        Intent receivedIntent = getIntent();
+        String receiverAction = receivedIntent.getAction();
+        if (receiverAction != null && receiverAction.equals(Intent.ACTION_SEND)){
+            if (receivedIntent.hasExtra(Intent.EXTRA_STREAM)){
+                sharedImageUri = (Uri) receivedIntent.getParcelableExtra(Intent.EXTRA_STREAM);
+            }
+        }
+
         RecyclerView recyclerView = findViewById(R.id.searchUserRecyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         usersList = new ArrayList<>();
-        searchUserAdapter = new SearchUserAdapter(this, usersList);
+        searchUserAdapter = new SearchUserAdapter(this, usersList,sharedImageUri);
         recyclerView.setAdapter(searchUserAdapter);
         getAllUsers();
+
     }
     private void getAllUsers() {
         final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();

@@ -18,8 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.database.DatabaseReference;
 import com.sai.btech.R;
+import com.sai.btech.dialogs.photoDialog;
 import com.sai.btech.managers.SharedPreferenceManager;
 import com.sai.btech.models.ChatMessageModel;
 import com.sai.btech.models.UserData;
@@ -30,14 +33,15 @@ import java.util.List;
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatModelViewHolder> {
     Context context;
     List<ChatMessageModel> chatMessageModelList;
-    String chatRoomType;
+    String chatRoomType,chatRoomId;
     ArrayList<String> selectedChatId = new ArrayList<>();
     boolean isSelectable = false;
 
-    public ChatAdapter(Context context, String chatRoomType, List<ChatMessageModel> chatMessageModelList) {
+    public ChatAdapter(Context context, String chatRoomType, List<ChatMessageModel> chatMessageModelList, String chatRoomId) {
         this.context = context;
         this.chatMessageModelList = chatMessageModelList;
         this.chatRoomType = chatRoomType;
+        this.chatRoomId = chatRoomId;
     }
 
     @NonNull
@@ -63,15 +67,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatModelViewH
                 holder.rightLayout.setVisibility(View.VISIBLE);
                 holder.rightImageLayout.setVisibility(View.GONE);
                 holder.leftImageLayout.setVisibility(View.GONE);
-                Glide.with(context).load(img).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.profileR);
+                Glide.with(context).load(img).apply(new RequestOptions().encodeQuality(20)).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.profileR);
                 holder.msgR.setText(msg);
             }else if(msgType.equals("image")){
                 holder.rightImageLayout.setVisibility(View.VISIBLE);
                 holder.leftImageLayout.setVisibility(View.GONE);
                 holder.rightLayout.setVisibility(View.GONE);
                 holder.leftLayout.setVisibility(View.GONE);
-                Glide.with(context).load(img).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.profileRImg);
-                Glide.with(context).load(msg).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.default_user_icon).into(holder.rightImage);
+                Glide.with(context).load(img).apply(new RequestOptions().encodeQuality(20)).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.profileRImg);
+                Glide.with(context).load(msg).apply(new RequestOptions().encodeQuality(5)).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.default_user_icon).into(holder.rightImage);
+
+                photoDialog photoDialog = new photoDialog(context,msg);
+                holder.rightImage.setOnClickListener(v -> photoDialog.show());
 
             }
         }else{
@@ -80,17 +87,25 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatModelViewH
                 holder.rightLayout.setVisibility(View.GONE);
                 holder.leftImageLayout.setVisibility(View.GONE);
                 holder.rightImageLayout.setVisibility(View.GONE);
-                Glide.with(context).load(img).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.profileL);
+                Glide.with(context).load(img).apply(new RequestOptions().encodeQuality(20)).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.profileL);
                 holder.msgL.setText(msg);
             }else if (msgType.equals("image")){
                 holder.rightImageLayout.setVisibility(View.GONE);
                 holder.leftImageLayout.setVisibility(View.VISIBLE);
                 holder.rightLayout.setVisibility(View.GONE);
                 holder.leftLayout.setVisibility(View.GONE);
-                Glide.with(context).load(img).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.profileLImg);
-                Glide.with(context).load(msg).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.default_user_icon).into(holder.leftImage);
+                Glide.with(context).load(img).apply(new RequestOptions().encodeQuality(20)).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.profileLImg);
+                Glide.with(context).load(msg).apply(new RequestOptions().encodeQuality(5)).diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.default_user_icon).into(holder.leftImage);
+
+                photoDialog photoDialog = new photoDialog(context,msg);
+                holder.leftImage.setOnClickListener(v -> photoDialog.show());
             }
         }
+        holder.itemView.setOnLongClickListener(v -> {
+            holder.itemView.setBackgroundColor(0xFFFFA500);
+            Toast.makeText(context, "msg id : "+id, Toast.LENGTH_SHORT).show();
+            return false;
+        });
 //        holder.leftLayout.setOnLongClickListener(v -> {
 //            isSelectable = true;
 //            selectedChatId.add(id);

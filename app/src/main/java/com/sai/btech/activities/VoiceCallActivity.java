@@ -11,8 +11,11 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -39,7 +42,10 @@ public class VoiceCallActivity extends AppCompatActivity {
     DatabaseReference callRef;
     String appId;
     boolean isChannelCreated = false;
+    ImageView callOutputIcon;
+    LinearLayout optionsForCallVoiceLayout;
     ArrayList<String> receivers = new ArrayList<>();
+    AudioManager audioManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +64,39 @@ public class VoiceCallActivity extends AppCompatActivity {
         ImageView imageView = findViewById(R.id.callDp);
         Glide.with(this).load(chatRoomImage).diskCacheStrategy(DiskCacheStrategy.ALL).into(imageView);
         joinChannel();
+
+        callOutputIcon = findViewById(R.id.callOutputMode);
+        optionsForCallVoiceLayout = findViewById(R.id.callOutputModeOptions);
+        optionsForCallVoiceLayout.setVisibility(View.GONE);
+        setAudioOutput();
+        callOutputIcon.setOnClickListener(v -> {
+            callOutputIcon.setVisibility(View.GONE);
+            optionsForCallVoiceLayout.setVisibility(View.VISIBLE);
+            TextView bluetooth,earPiece,speaker;
+            bluetooth = findViewById(R.id.bluetooth);
+            earPiece = findViewById(R.id.earPiece);
+            speaker = findViewById(R.id.speaker);
+            bluetooth.setOnClickListener(v1 -> {
+                callOutputIcon.setVisibility(View.VISIBLE);
+                optionsForCallVoiceLayout.setVisibility(View.GONE);
+            });
+            earPiece.setOnClickListener(v2->{
+                audioManager.setMode(AudioManager.MODE_IN_CALL);
+                audioManager.setSpeakerphoneOn(false);
+                callOutputIcon.setImageResource(R.drawable.default_user_icon);
+                callOutputIcon.setVisibility(View.VISIBLE);
+                optionsForCallVoiceLayout.setVisibility(View.GONE);
+            });
+            speaker.setOnClickListener(v3->{
+                audioManager.setMode(AudioManager.MODE_IN_CALL);
+                audioManager.setSpeakerphoneOn(true);
+                callOutputIcon.setImageResource(R.drawable.google);
+                callOutputIcon.setVisibility(View.VISIBLE);
+                optionsForCallVoiceLayout.setVisibility(View.GONE);
+            });
+        });
+
+
 
         ImageButton end = findViewById(R.id.end);
         end.setOnClickListener(v -> {
@@ -149,7 +188,7 @@ public class VoiceCallActivity extends AppCompatActivity {
 
     private void initializeAgoraEngine() {
         try {
-            rtcEngine = RtcEngine.create(getApplicationContext(), appId, new RtcEngineEventHandler());
+            rtcEngine = RtcEngine.create(getApplicationContext(), appId, new RtcEngineEventHandler(this));
             rtcEngine.setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION);
         } catch (Exception e) {
             e.printStackTrace();
@@ -158,11 +197,10 @@ public class VoiceCallActivity extends AppCompatActivity {
 
     private void joinChannel() {
         rtcEngine.joinChannel(null, AGORA_CHANNEL_NAME, null, 0);
-        setAudioOutput();
     }
 
     private void setAudioOutput() {
-        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter != null && bluetoothAdapter.isEnabled()) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
@@ -192,12 +230,15 @@ public class VoiceCallActivity extends AppCompatActivity {
                     audioManager.startBluetoothSco();
                     audioManager.setBluetoothScoOn(true);
                     audioManager.setSpeakerphoneOn(false);
+                    callOutputIcon.setImageResource(R.drawable.right_arrow);
+
                     break;
                 }
             }
         }else{
             audioManager.setMode(AudioManager.MODE_IN_CALL);
             audioManager.setSpeakerphoneOn(false);
+            callOutputIcon.setImageResource(R.drawable.default_user_icon);
         }
     }
 
