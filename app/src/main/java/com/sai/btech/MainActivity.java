@@ -1,3 +1,5 @@
+
+
 package com.sai.btech;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
             }
             startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
             finish();
-        },2000);
+        },3000);
 
     }
 }
